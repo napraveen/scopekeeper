@@ -144,12 +144,8 @@ def find_contradicted_decisions(
         dec_lower = dec.text.lower()
         # Look for explicit negative clauses like "no <term>" or "<term> is deferred"
         negated_terms = set(re.findall(r"\bno\s+([a-z0-9_-]+)", dec_lower))
-        negated_terms.update(
-            re.findall(r"\b([a-z0-9_-]+)\s+is\s+deferred", dec_lower)
-        )
-        negated_terms.update(
-            re.findall(r"\bwithout\s+([a-z0-9_-]+)", dec_lower)
-        )
+        negated_terms.update(re.findall(r"\b([a-z0-9_-]+)\s+is\s+deferred", dec_lower))
+        negated_terms.update(re.findall(r"\bwithout\s+([a-z0-9_-]+)", dec_lower))
         stemmed_negated = {_stem_token(t) for t in negated_terms} | negated_terms
         stemmed_quote = {_stem_token(t) for t in quote_tokens} | quote_tokens
 
@@ -167,9 +163,7 @@ def run_pre_checks(
 ) -> PreCheckHints:
     """Run deterministic pre-checks before LLM classification."""
     return PreCheckHints(
-        duplicate_candidates=find_duplicate_candidates(
-            quote, plan, threshold=duplicate_threshold
-        ),
+        duplicate_candidates=find_duplicate_candidates(quote, plan, threshold=duplicate_threshold),
         contradicted_decisions=find_contradicted_decisions(quote, decisions),
     )
 
@@ -342,14 +336,11 @@ def apply_post_rules(
         old_cat = updated.category
         updated.category = Category.UNCLEAR
         note = (
-            f"Reclassified {old_cat} -> UNCLEAR because confidence "
-            f"{updated.confidence:.2f} < 0.70"
+            f"Reclassified {old_cat} -> UNCLEAR because confidence {updated.confidence:.2f} < 0.70"
         )
         notes.append(note)
         if not updated.question:
-            updated.question = (
-                "Could you clarify how you would like us to handle this request?"
-            )
+            updated.question = "Could you clarify how you would like us to handle this request?"
         if not updated.choices:
             updated.choices = [
                 "Use the existing in-scope capability",

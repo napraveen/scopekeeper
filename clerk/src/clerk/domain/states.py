@@ -9,9 +9,7 @@ class InvalidStateTransitionError(ValueError):
     """Raised when an Ask or ChangeRequest attempts a forbidden state transition."""
 
     def __init__(self, entity: str, current: str, target: str) -> None:
-        super().__init__(
-            f"Invalid {entity} state transition: {current!r} -> {target!r}"
-        )
+        super().__init__(f"Invalid {entity} state transition: {current!r} -> {target!r}")
         self.entity = entity
         self.current = current
         self.target = target
@@ -101,16 +99,12 @@ def transition_ask(current: AskStatus, target: AskStatus) -> AskStatus:
     return target
 
 
-def can_transition_cr(
-    current: ChangeRequestStatus, target: ChangeRequestStatus
-) -> bool:
+def can_transition_cr(current: ChangeRequestStatus, target: ChangeRequestStatus) -> bool:
     """Return True if transitioning a ChangeRequest from `current` to `target` is allowed."""
     return target in ALLOWED_CR_TRANSITIONS.get(current, frozenset())
 
 
-def transition_cr(
-    current: ChangeRequestStatus, target: ChangeRequestStatus
-) -> ChangeRequestStatus:
+def transition_cr(current: ChangeRequestStatus, target: ChangeRequestStatus) -> ChangeRequestStatus:
     """Validate and return the new ChangeRequestStatus, or raise InvalidStateTransitionError."""
     if not can_transition_cr(current, target):
         raise InvalidStateTransitionError("ChangeRequest", current.value, target.value)

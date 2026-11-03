@@ -35,9 +35,7 @@ _MONTH_TO_INT: dict[str, int] = {
     "dec": 12,
 }
 
-_MONTH_PATTERN = "|".join(
-    sorted(_MONTH_TO_INT.keys(), key=len, reverse=True)
-)
+_MONTH_PATTERN = "|".join(sorted(_MONTH_TO_INT.keys(), key=len, reverse=True))
 
 
 @dataclass(frozen=True)
@@ -67,9 +65,7 @@ def _extract_from_string(
     # Remove URLs first so port numbers or paths in URLs aren't misread as facts
     scrubbed = re.sub(r"https?://\S+", " ", text)
     # Remove canonical entity IDs like ASK-0007, CR-004, Q-0001, W-0001, DEC-002, I9, M2, D1
-    scrubbed = re.sub(
-        r"\b(?:ASK|CR|Q|W|DEC|GW)-\d+\b", " ", scrubbed, flags=re.IGNORECASE
-    )
+    scrubbed = re.sub(r"\b(?:ASK|CR|Q|W|DEC|GW)-\d+\b", " ", scrubbed, flags=re.IGNORECASE)
     scrubbed = re.sub(r"\b[IMD]\d+\b", " ", scrubbed)
 
     money_set: set[str] = set()

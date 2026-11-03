@@ -90,9 +90,7 @@ def next_handover(
     if is_autopilot_window(now, schedule):
         # Currently held by scout; next handover is to_person (priya) at 09:30 IST
         target_date = (
-            agency_now.date() + timedelta(days=1)
-            if current_t >= to_agent
-            else agency_now.date()
+            agency_now.date() + timedelta(days=1) if current_t >= to_agent else agency_now.date()
         )
         handover_dt = datetime.combine(target_date, to_person, tzinfo=agency_tz)
         return handover_dt, "priya"

@@ -17,13 +17,13 @@ from clerk.domain.models import (
 )
 
 EXPECTED_INTAKE_FORMAT = (
-    'Expected one of:\n'
+    "Expected one of:\n"
     '  ASK | "<exact quote>" | requester=<name> | link=<url>\n'
     '  ANSWER Q-NNNN | "<quote>" | link=<url>\n'
-    '  DECISION CR-NNN <A|B|C|D|DECLINE> | link=<url>\n'
-    '  ACCEPT ASK-NNNN | link=<url>\n'
+    "  DECISION CR-NNN <A|B|C|D|DECLINE> | link=<url>\n"
+    "  ACCEPT ASK-NNNN | link=<url>\n"
     '  DISPUTE ASK-NNNN | "<quote>" | link=<url>\n'
-    '  DRAFT ASK-NNNN: <text>'
+    "  DRAFT ASK-NNNN: <text>"
 )
 
 EXPECTED_ESTIMATE_FORMAT = (
@@ -281,9 +281,7 @@ ClerkCommand = (
 def _strip_code_fences(text: str) -> str:
     """Remove surrounding markdown code fences and leading @mentions if present."""
     cleaned = text.strip()
-    fence_match = re.match(
-        r"^```[a-zA-Z0-9_-]*\s*\n(.*?)\n```\s*$", cleaned, flags=re.DOTALL
-    )
+    fence_match = re.match(r"^```[a-zA-Z0-9_-]*\s*\n(.*?)\n```\s*$", cleaned, flags=re.DOTALL)
     if fence_match:
         cleaned = fence_match.group(1).strip()
     elif cleaned.startswith("`") and cleaned.endswith("`") and "\n" not in cleaned:
@@ -534,9 +532,7 @@ def parse_intake_messages(text: str) -> list[IntakeMessage]:
 def parse_clerk_to_scout_message(text: str) -> ClerkToScoutMessage:
     """Parse a message sent by Clerk to Scout in acme-intake."""
     cleaned = _strip_code_fences(text)
-    cleaned = re.sub(
-        r"^@(?:acme-)?scout[:\s,]*", "", cleaned, flags=re.IGNORECASE
-    ).strip()
+    cleaned = re.sub(r"^@(?:acme-)?scout[:\s,]*", "", cleaned, flags=re.IGNORECASE).strip()
 
     mode_match = re.match(
         r"^MODE\s+(autopilot|copilot)(?:\s+until\s+(.+))?$",
@@ -649,8 +645,7 @@ def parse_estimator_reply(text: str, posted_at: str = "") -> ParsedEstimatorRepl
                 confidence=Confidence(str(sm_raw["confidence"]).lower()),
             )
         similar = [
-            SimilarMerge(ref=str(s["ref"]), hours=int(s["hours"]))
-            for s in data.get("similar", [])
+            SimilarMerge(ref=str(s["ref"]), hours=int(s["hours"])) for s in data.get("similar", [])
         ]
         estimate = Estimate(
             full=full,
@@ -742,9 +737,7 @@ def parse_clerk_command(
     ).strip()
 
     if not cleaned:
-        raise ParseError(
-            "Empty @clerk command.", expected_format=EXPECTED_CLERK_COMMAND_FORMAT
-        )
+        raise ParseError("Empty @clerk command.", expected_format=EXPECTED_CLERK_COMMAND_FORMAT)
 
     # 1. Demo controls
     if re.match(r"^flip\s+now\b", cleaned, flags=re.IGNORECASE):
@@ -765,9 +758,7 @@ def parse_clerk_command(
         return MemoryQueryCommand(topic=mem_match.group(1).strip().rstrip("?"))
 
     # 3. @clerk confirm [CR-NNN]
-    confirm_match = re.match(
-        r"^confirm(?:\s+(CR-\d+))?\s*$", cleaned, flags=re.IGNORECASE
-    )
+    confirm_match = re.match(r"^confirm(?:\s+(CR-\d+))?\s*$", cleaned, flags=re.IGNORECASE)
     if confirm_match:
         cr_id = confirm_match.group(1).upper() if confirm_match.group(1) else default_cr_id
         return ConfirmCommand(cr_id=cr_id)
@@ -834,18 +825,14 @@ def parse_clerk_command(
         return PriceOverrideCommand(option=opt, price_usd=amt, cr_id=cr_id)
 
     # 7. @clerk goodwill <ASK-NNNN> [reason]
-    gw_match = re.match(
-        r"^goodwill\s+(ASK-\d+)(?:\s+(.+))?\s*$", cleaned, flags=re.IGNORECASE
-    )
+    gw_match = re.match(r"^goodwill\s+(ASK-\d+)(?:\s+(.+))?\s*$", cleaned, flags=re.IGNORECASE)
     if gw_match:
         ask_id = gw_match.group(1).upper()
         reason = gw_match.group(2).strip() if gw_match.group(2) else None
         return GoodwillCommand(ask_id=ask_id, reason=reason)
 
     # 8. @clerk decline [CR-NNN] <reason>
-    dec_match = re.match(
-        r"^decline(?:\s+(CR-\d+))?\s+(.+)$", cleaned, flags=re.IGNORECASE
-    )
+    dec_match = re.match(r"^decline(?:\s+(CR-\d+))?\s+(.+)$", cleaned, flags=re.IGNORECASE)
     if dec_match:
         cr_id = dec_match.group(1).upper() if dec_match.group(1) else default_cr_id
         reason = dec_match.group(2).strip()
@@ -863,23 +850,15 @@ def parse_clerk_command(
         try:
             month = _normalize_month(inv_match.group(1), default_year)
         except ValueError as exc:
-            raise ParseError(
-                str(exc), expected_format=EXPECTED_CLERK_COMMAND_FORMAT
-            ) from exc
+            raise ParseError(str(exc), expected_format=EXPECTED_CLERK_COMMAND_FORMAT) from exc
         return InvoiceCommand(month=month)
 
     if re.match(r"^renewal\s*$", cleaned, flags=re.IGNORECASE):
         return RenewalCommand()
 
-    status_match = re.match(
-        r"^status(?:\s+((?:CR|ASK)-\d+))?\s*$", cleaned, flags=re.IGNORECASE
-    )
+    status_match = re.match(r"^status(?:\s+((?:CR|ASK)-\d+))?\s*$", cleaned, flags=re.IGNORECASE)
     if status_match:
-        target = (
-            status_match.group(1).upper()
-            if status_match.group(1)
-            else default_cr_id
-        )
+        target = status_match.group(1).upper() if status_match.group(1) else default_cr_id
         return StatusCommand(target_id=target)
 
     raise ParseError(

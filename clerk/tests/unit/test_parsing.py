@@ -50,18 +50,14 @@ def test_parse_intake_messages_clean_and_messy() -> None:
     assert ask.requester == "Sam"
     assert ask.link == "https://discord.com/1"
 
-    ans = parse_intake_message(
-        '`ANSWER Q-0001 | "Option 2 please" | link=https://discord.com/2`'
-    )
+    ans = parse_intake_message('`ANSWER Q-0001 | "Option 2 please" | link=https://discord.com/2`')
     assert isinstance(ans, IntakeAnswerMessage)
     assert ans.question_id == "Q-0001"
     assert ans.quote == "Option 2 please"
     assert ans.link == "https://discord.com/2"
 
     # Pipe-separated ANSWER variant
-    ans2 = parse_intake_message(
-        'ANSWER | Q-0002 | "Excel" | link=https://discord.com/2b'
-    )
+    ans2 = parse_intake_message('ANSWER | Q-0002 | "Excel" | link=https://discord.com/2b')
     assert isinstance(ans2, IntakeAnswerMessage)
     assert ans2.question_id == "Q-0002"
 
@@ -71,7 +67,9 @@ def test_parse_intake_messages_clean_and_messy() -> None:
     assert dec.choice == OptionKey.D
     assert dec.link == "https://discord.com/3"
 
-    dec_decline = parse_intake_message('DECISION | CR-004 | "not now" | link=https://discord.com/3b')
+    dec_decline = parse_intake_message(
+        'DECISION | CR-004 | "not now" | link=https://discord.com/3b'
+    )
     assert isinstance(dec_decline, IntakeDecisionMessage)
     assert dec_decline.choice == "DECLINE"
 
@@ -193,9 +191,7 @@ def test_parse_estimator_reply_fenced_and_json() -> None:
 
 def test_parse_builder_done() -> None:
     """Verify Builder DONE command parsing."""
-    done = parse_builder_done(
-        "@clerk DONE W-0003 pr=https://github.com/acme/portal/pull/48"
-    )
+    done = parse_builder_done("@clerk DONE W-0003 pr=https://github.com/acme/portal/pull/48")
     assert isinstance(done, BuilderDoneMessage)
     assert done.work_id == "W-0003"
     assert done.pr_url == "https://github.com/acme/portal/pull/48"

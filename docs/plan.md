@@ -172,9 +172,9 @@ scopekeeper/
 - [x] **Phase 1: Scaffold and domain**
   - Repo layout, tooling (`pyproject.toml`, `.env.example`, `justfile`, `docker-compose.yml`), `config/*` files, `switch/*` instruction/template files, config Pydantic models, and all `clerk/src/clerk/domain/` modules.
   - Unit tests pass in `clerk/tests/unit` (65/65 passing, 96% domain coverage) for prices, dates, swaps, envelope, goodwill, warranty post-rules, state transitions, parsers, numbers check, templates, and config loading; `mypy --strict` and `ruff check` pass on `src/` and `tests/`.
-- [ ] **Phase 2: Fakes and golden path**
-  - Ports, fake adapters (`InMemorySwitch`, `ScriptedLLM`, `LocalGitHost`, `FakePreview`, `SimulatedClock`), workflow services, and SQLAlchemy database + Alembic migrations.
-  - The golden-path test (`clerk/tests/integration/test_overnight_story.py`) passes offline.
+- [x] **Phase 2: Fakes and golden path**
+  - Ports (`clerk/src/clerk/ports/protocols.py`), fake adapters (`InMemorySwitch`, `ScriptedLLM`, `LocalGitHost`, `FakePreview`, `SimulatedClock`), workflow services (`ClassifierService`, `ChangeRequestService`, `BriefService`, `FlipService`, `MemoryService`, `RenewalService`, `InvoiceService`, `BuiltinScout`, `WorkflowOrchestrator`), and SQLAlchemy 2.0 database (`tables.py`, `session.py`, `repositories.py`) + Alembic migrations (`0001_initial_schema.py`).
+  - The golden-path integration test (`clerk/tests/integration/test_overnight_story.py`) and companion tests pass offline (71/71 total tests passing, `ruff check` and `mypy --strict` passing across 52 source files).
 - [ ] **Phase 3: Real Switch**
   - `SwitchProtocolAdapter` (WebSocket stream + 2s `ping`/`pong` heartbeat + session placements + HTTP ops), consumer worker, reconnects, and contract tests.
   - Clerk joins its rooms, maintains its heartbeat, and answers `@clerk status` in chat.

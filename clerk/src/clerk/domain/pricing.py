@@ -155,9 +155,7 @@ def build_options(
             if smaller_confirmed_hours is not None
             else estimate.smaller.p50_hours
         )
-        sm_price_cents = compute_price_cents(
-            sm_hours, estimate.smaller.confidence, rate_card
-        )
+        sm_price_cents = compute_price_cents(sm_hours, estimate.smaller.confidence, rate_card)
         sm_shift_days = compute_shift_days(sm_hours, plan.capacity_hours_per_week)
         sm_new_due = (
             shift_due_date(milestone_due, sm_shift_days)
@@ -165,11 +163,7 @@ def build_options(
             else milestone_due
         )
         short_name = _short_smaller_name(estimate.smaller.title)
-        c_label = (
-            f"{short_name} by {smaller_due_hint}"
-            if smaller_due_hint
-            else short_name
-        )
+        c_label = f"{short_name} by {smaller_due_hint}" if smaller_due_hint else short_name
         options.append(
             OptionQuote(
                 key=OptionKey.C,
@@ -205,9 +199,7 @@ def build_options(
             if swap.using_smaller
             else (estimate.full.title or ask_title)
         )
-        removed_desc = " and ".join(
-            _lower_article_title(item.title) for item in swap.items
-        )
+        removed_desc = " and ".join(_lower_article_title(item.title) for item in swap.items)
         d_label = f"{swap_in_name} instead of {removed_desc}"
         options.append(
             OptionQuote(

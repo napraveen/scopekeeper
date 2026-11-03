@@ -131,9 +131,7 @@ def find_swap_for_hours(
                 )
 
     if pair_matches:
-        pair_matches.sort(
-            key=lambda entry: (entry[0], entry[1], entry[2], entry[3], entry[4])
-        )
+        pair_matches.sort(key=lambda entry: (entry[0], entry[1], entry[2], entry[3], entry[4]))
         return pair_matches[0][5]
 
     return None

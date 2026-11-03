@@ -116,8 +116,7 @@ def load_yaml_config[TModel: BaseModel](path: Path, model_cls: type[TModel]) -> 
         return model_cls.model_validate(data)
     except ValidationError as exc:
         details = "; ".join(
-            f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}"
-            for err in exc.errors()
+            f"{'.'.join(str(loc) for loc in err['loc'])}: {err['msg']}" for err in exc.errors()
         )
         raise ConfigValidationError(path, f"Schema validation failed ({details})") from exc
 

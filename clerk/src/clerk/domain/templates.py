@@ -56,9 +56,7 @@ def render_verdicts(asks: Sequence[Ask]) -> str:
     """Render a numbered list of verdicts, one line per ask, with the clause in brackets."""
     lines: list[str] = []
     for idx, ask in enumerate(asks, 1):
-        clause_str = (
-            f" [clause {', '.join(ask.clause_ids)}]" if ask.clause_ids else ""
-        )
+        clause_str = f" [clause {', '.join(ask.clause_ids)}]" if ask.clause_ids else ""
         cat = ask.category
         if cat == Category.DEFECT:
             verdict = "Defect under warranty — we're fixing this free of charge"
@@ -107,10 +105,7 @@ def render_change_order(
     current_milestone_due: str | None = None,
 ) -> str:
     """Render a client-facing Change Order message matching Section 6."""
-    header = (
-        f"{subject} is outside our current agreement "
-        f"(clause {clause_id}, {clause_summary})."
-    )
+    header = f"{subject} is outside our current agreement (clause {clause_id}, {clause_summary})."
     if len(options) == 1 and options[0].shift_days == 0:
         opt = options[0]
         price_str = format_usd(opt.price_cents)
@@ -125,13 +120,9 @@ def render_change_order(
         keys_list.append(opt.key.value)
         price_str = format_usd(opt.price_cents)
         if opt.key == OptionKey.D or opt.swap_out:
-            lines.append(
-                f"{opt.key.value}) {opt.label}: no extra cost, no date change"
-            )
+            lines.append(f"{opt.key.value}) {opt.label}: no extra cost, no date change")
         elif opt.key == OptionKey.B:
-            lines.append(
-                f"{opt.key.value}) {opt.label}: {price_str}; no change to current dates"
-            )
+            lines.append(f"{opt.key.value}) {opt.label}: {price_str}; no change to current dates")
         elif opt.key == OptionKey.C:
             if opt.shift_days > 0:
                 day_word = "day" if opt.shift_days == 1 else "days"
@@ -162,13 +153,9 @@ def render_ready(target_id: str, client_text: str) -> str:
     return f"READY {target_id}\n{client_text.strip()}"
 
 
-def render_question(
-    question_id: str, ask_id: str, text: str, choices: Sequence[str]
-) -> str:
+def render_question(question_id: str, ask_id: str, text: str, choices: Sequence[str]) -> str:
     """Render a Clerk -> Scout QUESTION message for acme-intake."""
-    formatted_choices = " ".join(
-        f"{idx}) {choice}" for idx, choice in enumerate(choices, 1)
-    )
+    formatted_choices = " ".join(f"{idx}) {choice}" for idx, choice in enumerate(choices, 1))
     return f"QUESTION {question_id} for {ask_id}\n{text.strip()}\nChoices: {formatted_choices}"
 
 
@@ -185,11 +172,7 @@ def render_estimator_request(
     estimator_handle: str = "@acme-estimator",
 ) -> str:
     """Render Clerk's targeted request to the Estimator in a change room (Section 6)."""
-    handle = (
-        estimator_handle
-        if estimator_handle.startswith("@")
-        else f"@{estimator_handle}"
-    )
+    handle = estimator_handle if estimator_handle.startswith("@") else f"@{estimator_handle}"
     return (
         f'{handle} estimate {cr_id} for {ask_id}: "{quote}". '
         f"Context: {context}. Repo: {repo_name}. "
@@ -208,9 +191,7 @@ def render_work_order(
     builder_handle: str = "@acme-builder",
 ) -> str:
     """Render Clerk's targeted WORK order to the Builder in acme-delivery (Section 6)."""
-    handle = (
-        builder_handle if builder_handle.startswith("@") else f"@{builder_handle}"
-    )
+    handle = builder_handle if builder_handle.startswith("@") else f"@{builder_handle}"
     return (
         f"{handle} WORK {work.id} for {ask.id} ({clause_note})\n"
         f"Ticket: {ticket_ref}\n"
@@ -230,7 +211,7 @@ def render_change_room_opening(
     """Render the opening summary message in a newly created acme-cr-NNN room."""
     clauses = ", ".join(ask.clause_ids) if ask.clause_ids else "none"
     return (
-        f"Change Request {cr.id} opened for {ask.id}: \"{ask.quote}\"\n"
+        f'Change Request {cr.id} opened for {ask.id}: "{ask.quote}"\n'
         f"Requester: {ask.requester} | Source: {ask.source.url}\n"
         f"Governing SOW Clause(s): {clauses} — {sow_context}\n"
         f"Step 1: Waiting on @acme-estimator to post `scopekeeper-estimate`."
@@ -250,8 +231,7 @@ def render_morning_brief(
     # 1. Came in overnight
     if came_in:
         ask_summaries = ", ".join(
-            f"{a.id} ({a.category.value if a.category else 'pending'})"
-            for a in came_in
+            f"{a.id} ({a.category.value if a.category else 'pending'})" for a in came_in
         )
         lines.append(f"- Came in ({len(came_in)}): {ask_summaries}")
     else:
@@ -312,9 +292,7 @@ def render_invoice_csv(entries: Sequence[LedgerEntry]) -> str:
     """Render the monthly invoice CSV (`date,change,option,hours,price_usd,approved_by,link`)."""
     buf = io.StringIO()
     writer = csv.writer(buf, lineterminator="\n")
-    writer.writerow(
-        ["date", "change", "option", "hours", "price_usd", "approved_by", "link"]
-    )
+    writer.writerow(["date", "change", "option", "hours", "price_usd", "approved_by", "link"])
     for entry in entries:
         if entry.kind not in {"change_order", "swap"}:
             continue
@@ -325,11 +303,7 @@ def render_invoice_csv(entries: Sequence[LedgerEntry]) -> str:
             if price_usd == price_usd.to_integral_value()
             else f"{price_usd:.2f}"
         )
-        hours_str = (
-            str(int(entry.hours))
-            if float(entry.hours).is_integer()
-            else f"{entry.hours:g}"
-        )
+        hours_str = str(int(entry.hours)) if float(entry.hours).is_integer() else f"{entry.hours:g}"
         writer.writerow(
             [
                 entry.date,
@@ -355,6 +329,6 @@ def render_renewal_report(themes: Sequence[dict[str, Any]]) -> str:
         member_ids = ", ".join(str(m) for m in theme.get("member_ids", []))
         hours = int(theme.get("total_hours", 0))
         total_hours += hours
-        lines.append(f"{idx}) {name} ({ member_ids }) — {hours} h")
+        lines.append(f"{idx}) {name} ({member_ids}) — {hours} h")
     lines.append(f"Total proposed renewal scope: {total_hours} h")
     return "\n".join(lines)

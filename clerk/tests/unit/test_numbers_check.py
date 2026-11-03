@@ -57,9 +57,7 @@ def test_check_numbers_fails_on_hallucinated_date_or_number() -> None:
         "dates": ["2026-12-15"],
         "clauses": ["1.3"],
     }
-    text = (
-        "Under CR-004 (clause 4.9), we can deliver in 40 hours for $2,650 by December 20."
-    )
+    text = "Under CR-004 (clause 4.9), we can deliver in 40 hours for $2,650 by December 20."
     result = check_numbers(text, facts)
     assert result.passed is False
     assert "40" in result.unexpected_tokens
