@@ -1,0 +1,81 @@
+asks:
+  - id: 1
+    quote: "The login button doesn't work on Safari"
+    expected_category: DEFECT
+    expected_clauses: ["1.1"]
+  - id: 2
+    quote: "Can we get a dark theme?"
+    expected_category: IN_SCOPE
+    expected_clauses: ["2.4"]
+  - id: 3
+    quote: "Export the reports to Excel please"
+    expected_category: UNCLEAR
+    expected_clauses: ["3.2"]
+  - id: 4
+    quote: "We need an Android app for the board"
+    expected_category: OUT_OF_SCOPE
+    expected_clauses: ["1.3"]
+  - id: 5
+    quote: "Make an iPhone app too"
+    expected_category: OUT_OF_SCOPE
+    expected_clauses: ["1.3"]
+  - id: 6
+    quote: "Connect the reports to Power BI"
+    expected_category: OUT_OF_SCOPE
+    expected_clauses: ["3.5"]
+  - id: 7
+    quote: "The CSV export has the wrong date column"
+    expected_category: DEFECT
+    expected_clauses: ["3.2"]
+  - id: 8
+    quote: "Add a filter by region on the reports page"
+    expected_category: DUPLICATE
+    expected_related_item: "I10"
+  - id: 9
+    quote: "Use our brand colours in the header"
+    expected_category: IN_SCOPE
+    expected_clauses: ["2.4"]
+  - id: 10
+    quote: "The page is broken on Firefox mobile"
+    expected_category: DEFECT
+    expected_clauses: ["1.1"]
+  - id: 11
+    quote: "Can you send SMS alerts?"
+    expected_category: ALREADY_DECIDED
+    expected_decision_id: "DEC-002"
+  - id: 12
+    quote: "Add an admin analytics dashboard"
+    expected_category: DUPLICATE
+    expected_related_item: "I9"
+  - id: 13
+    quote: "Can the app work offline?"
+    expected_category: OUT_OF_SCOPE
+    expected_clauses: []
+  - id: 14
+    quote: "Could the dashboard load faster?"
+    expected_category: UNCLEAR
+    expected_clauses: []
+  - id: 15
+    quote: "Translate the site into Hindi"
+    expected_category: OUT_OF_SCOPE
+    expected_clauses: []
+  - id: 16
+    quote: "The reports page crashes when I pick last year"
+    expected_category: DEFECT
+    expected_clauses: ["3.2"]
+  - id: 17
+    quote: "Please add CSV export to the reports page"
+    expected_category: DUPLICATE
+    expected_related_item: "I8"
+  - id: 18
+    quote: "We want PDF export of reports"
+    expected_category: UNCLEAR
+    expected_clauses: ["3.2"]
+  - id: 19
+    quote: "Switch the font to our brand typeface"
+    expected_category: IN_SCOPE
+    expected_clauses: ["2.4"]
+  - id: 20
+    quote: "Can we have SMS for password resets?"
+    expected_category: ALREADY_DECIDED
+    expected_decision_id: "DEC-002"

@@ -1,0 +1,37 @@
+project: Acme Web Portal
+client: Acme Inc.
+sow_version: '1.2'
+warranty_days: 30
+deliverables:
+  - {
+      id: D1,
+      clause: '1.1',
+      title: Responsive web app,
+      includes:
+        [
+          desktop and mobile browsers,
+          latest two versions of Chrome,
+          Safari and Firefox,
+          login,
+        ],
+    }
+  - {
+      id: D2,
+      clause: '2.4',
+      title: Theming,
+      includes: [light theme, dark theme, brand colours, brand typeface],
+    }
+  - {
+      id: D3,
+      clause: '3.2',
+      title: Reports page,
+      includes: [filters, CSV export],
+    }
+  - { id: D4, clause: '4.1', title: Admin analytics dashboard }
+exclusions:
+  - { clause: '1.3', text: 'Native mobile apps (iOS, Android)' }
+  - { clause: '3.5', text: Third-party BI integrations }
+change_policy:
+  goodwill_hours_per_month: 8
+  goodwill_suggest_below_hours: 2
+  swap: { allowed: true, tolerance: 0.10, only_unstarted: true }

@@ -1,0 +1,156 @@
+version: 1
+params:
+  client_bridge:
+    type: bridge
+    label: Client messaging app (Discord)
+    default: [Discord, Mattermost, $first]
+  agency_bridge:
+    type: bridge
+    label: Agency messaging app (Slack)
+    default: [Slack, Mattermost, $first]
+  client_user:
+    type: user
+    label: Client user (Sam)
+    default: sam
+  account_manager:
+    type: user
+    label: Account Manager (Priya)
+    default: priya
+  delivery_lead:
+    type: user
+    label: Delivery Lead (Ravi)
+    default: ravi
+  reviewer:
+    type: user
+    label: Code Reviewer (Aisha)
+    default: aisha
+  clerk_agent:
+    type: agent
+    label: Clerk custom agent
+    default: [clerk]
+  location:
+    type: location
+    default: local
+    input: advanced
+  repo_dir:
+    type: directory
+    label: Demo repository directory
+    default: "{$agents_dir}/acme-portal"
+    input: advanced
+
+agents:
+  - name: acme-scout
+    display_name: Scout
+    description: Client desk agent for Acme Web Portal
+    provider: opencode
+    location: "{location}"
+    directory: "{$agents_dir}/acme-scout"
+    addressing: anyone
+    allow_existing: true
+    instructions: |
+      You are Scout, the client desk for Acme. Follow each room's instructions. Relay every client ask, answer, choice, acceptance or dispute to acme-intake in the exact formats. Call assume_role(role="client-desk") when Clerk sends MODE autopilot, and call release_role() when Clerk sends MODE copilot. Every price, date or scope ruling you state comes from Clerk.
+  - name: acme-estimator
+    display_name: Estimator
+    description: Read-only code and git-history estimator for acme-portal
+    provider: claude
+    location: "{location}"
+    directory: "{repo_dir}"
+    addressing: owner-agents
+    allow_existing: true
+    instructions: |
+      You are the Estimator for acme-portal. Never edit files. When Clerk asks in a change room, map the ask to code, size it, find the three most similar past merges using their Effort-Hours trailers, and reply to @clerk with one fenced block tagged scopekeeper-estimate in the schema you were given. Offer a smaller version when the full ask is large.
+  - name: acme-builder
+    display_name: Builder
+    description: Branch-only implementation agent for acme-portal
+    provider: codex
+    location: "{location}"
+    directory: "{repo_dir}"
+    addressing: owner-agents
+    allow_existing: true
+    instructions: |
+      You are the Builder for acme-portal. Build only work orders Clerk sends as WORK. Use the given branch and pull-request title, never push to main, run the tests, open the pull request, then reply "@clerk DONE <work id> pr=<url>".
+
+group:
+  name: Acme Web Portal
+  description: Cross-company client desk and scope-to-delivery workflow for Acme Inc.
+  color: "#4F46E5"
+
+rooms:
+  - name: acme-client
+    description: Shared client room with Acme Inc. on Discord
+    bridge: "{client_bridge}"
+    channel_type: channel_public
+    agents: [acme-scout]
+    users: ["{client_user}", "{account_manager}"]
+    instructions: |
+      This room is shared with Acme, our client. People here may not be technical.
+      - Reply in plain English, at most 5 short lines. No code, tool names or internal names.
+      - Never state a price, date or scope decision unless Clerk sent it to you in acme-intake.
+      - Never say no. Offer the options Clerk gives you and ask for one choice.
+      - Ask one question at a time, with 2 or 3 choices when you can.
+      - When a message holds several asks, list them back numbered before answering.
+      - If you hold @client-desk, answer every client message within a minute. If not, draft your reply in acme-intake for Priya.
+      - Defects are always free. Say so.
+    roles:
+      - name: client-desk
+        exclusive: true
+        instructions: |
+          You are covering the client desk while the agency team is offline.
+          - At the start of your shift, tell the client once that you are covering until 11 PM their time.
+          - Handle every ask through Clerk. Send a change order only when Clerk marks it in-envelope.
+          - Emergency, such as the site being down: page @on-call at once.
+          - Anything else that needs a person: tell the client Priya will reply by 11 PM their time, and flag it in acme-delivery.
+    docs:
+      - name: scope-summary
+        description: Signed SOW v1.2 deliverables and exclusions summary
+        instructions: Consult before answering scope questions; defer rulings to Clerk.
+        content: |
+          Deliverables: D1 Responsive web app (1.1), D2 Theming (2.4), D3 Reports page & CSV export (3.2), D4 Admin analytics dashboard (4.1).
+          Exclusions: 1.3 Native mobile apps (iOS, Android), 3.5 Third-party BI integrations.
+    kickoff: "@acme-scout confirm you are connected to acme-client and acme-intake."
+
+  - name: acme-intake
+    description: Agency handoff room between Scout and Clerk
+    bridge: "{agency_bridge}"
+    channel_type: channel_public
+    agents: [acme-scout, "{clerk_agent}"]
+    users: ["{account_manager}"]
+    instructions: |
+      Handoff room between Scout (client desk) and Clerk (contract keeper).
+      - Use only the formats in BUILD_PROMPT section 6.
+      - No rates, margins or internal opinions in this room.
+      - Scout copies READY text to acme-client without changing any fact or number.
+
+  - name: acme-delivery
+    description: Internal agency delivery and governance room
+    bridge: "{agency_bridge}"
+    channel_type: channel_public
+    agents: ["{clerk_agent}", acme-estimator, acme-builder]
+    users: ["{account_manager}", "{delivery_lead}", "{reviewer}"]
+    instructions: |
+      Internal delivery room for Acme.
+      - The Builder posts a link for every issue, pull request and preview it creates.
+      - The Estimator posts estimates only in change rooms.
+      - Agents post nothing that only acknowledges ("ok", "thanks", "on it").
+      - While a decision is with a person, agents wait silently.
+      - Clerk posts the morning brief at 9:30 AM IST and the ledger on request.
+    roles:
+      - name: account-manager
+        exclusive: false
+        instructions: |
+          Account Manager governance role (held by Priya). Approves change orders, overrides prices, and grants goodwill.
+      - name: delivery-lead
+        exclusive: false
+        instructions: |
+          Delivery Lead governance role (held by Ravi). Confirms or adjusts hours estimates.
+
+links:
+  - { from: acme-client, to: acme-intake, label: "asks in, client-ready answers out" }
+  - { from: acme-intake, to: acme-client, label: "asks in, client-ready answers out" }
+  - { from: acme-intake, to: acme-delivery, label: "approved work becomes tickets" }
+  - { from: acme-delivery, to: acme-intake, label: "approved work becomes tickets" }
+
+form:
+  advanced:
+    label: Advanced
+    open: false

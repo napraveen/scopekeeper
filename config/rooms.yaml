@@ -1,0 +1,24 @@
+group:
+  name: Acme Web Portal
+  color: '#4F46E5'
+rooms:
+  client: { name: acme-client, id: '<fill after setup>' }
+  intake: { name: acme-intake, id: '<fill after setup>' }
+  delivery: { name: acme-delivery, id: '<fill after setup>' }
+  change_room_prefix: acme-cr-
+handles:
+  scout: '@acme-scout'
+  estimator: '@acme-estimator'
+  builder: '@acme-builder'
+  clerk: '@clerk'
+people:
+  sam: { display: Sam, username: sam, side: client, roles: [] }
+  priya:
+    {
+      display: Priya,
+      username: priya,
+      side: agency,
+      roles: [account-manager, client-desk],
+    }
+  ravi: { display: Ravi, username: ravi, side: agency, roles: [delivery-lead] }
+  aisha: { display: Aisha, username: aisha, side: agency, roles: [] }

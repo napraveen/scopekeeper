@@ -1,0 +1,50 @@
+capacity_hours_per_week: 120
+milestones:
+  - id: M1
+    name: Launch
+    due: 2026-10-25
+    items:
+      - {
+          id: I1,
+          title: Responsive layout and login,
+          deliverable: D1,
+          hours: 46,
+          status: done,
+          done_on: 2026-10-20,
+        }
+      - {
+          id: I2,
+          title: Reports page with filters v1,
+          deliverable: D3,
+          hours: 40,
+          status: done,
+          done_on: 2026-10-25,
+        }
+  - id: M2
+    name: Reporting release
+    due: 2026-12-12
+    items:
+      - {
+          id: I8,
+          title: CSV export,
+          deliverable: D3,
+          hours: 12,
+          status: done,
+          done_on: 2026-10-28,
+        }
+      - {
+          id: I9,
+          title: Admin analytics dashboard,
+          deliverable: D4,
+          hours: 58,
+          status: unstarted,
+          priority: 3,
+        }
+      - {
+          id: I10,
+          title: Report filters v2,
+          deliverable: D3,
+          hours: 24,
+          status: unstarted,
+          priority: 2,
+        }

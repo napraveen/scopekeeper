@@ -1,0 +1,4 @@
+max_price_usd: 500
+min_confidence: high
+milestone_impact_days: 0
+client_in_good_standing: true

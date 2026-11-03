@@ -1,0 +1,6 @@
+agency_timezone: Asia/Kolkata
+client_timezone: America/New_York
+flip:
+  { to_agent_at: '19:00', to_person_at: '09:30', agent: scout, person: priya }
+morning_brief_at: '09:30'
+demo: { simulated_start: '2026-11-05T19:00:00+05:30' }

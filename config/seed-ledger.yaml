@@ -1,0 +1,197 @@
+decisions:
+  - id: DEC-001
+    date: '2026-10-10'
+    text: 'All portal authentication uses email + magic link or password; SSO is deferred to Phase 2.'
+    link: 'https://discord.com/channels/acme/acme-client/msg-dec-001'
+    source: client
+  - id: DEC-002
+    date: '2026-10-15'
+    text: 'Notifications are email-only; no SMS'
+    link: 'https://discord.com/channels/acme/acme-client/msg-dec-002'
+    source: client
+
+asks:
+  - id: ASK-0001
+    quote: 'Mobile navigation menu overlaps the logo on iPhone SE.'
+    requester: Sam
+    created_at: '2026-10-21T14:15:00Z'
+    decided_at: '2026-10-21T14:20:00Z'
+    status: accepted
+    category: DEFECT
+    clause_ids: ['1.1']
+    related_item: I1
+    confidence: 0.96
+    reason: 'Responsive layout defect within 30-day warranty of item I1.'
+    source_room: acme-client
+    source_message_id: msg-ask-0001
+    source_link: 'https://discord.com/channels/acme/acme-client/msg-ask-0001'
+  - id: ASK-0002
+    quote: 'Can we post daily report summaries directly into a Slack channel?'
+    requester: Sam
+    created_at: '2026-10-22T15:00:00Z'
+    decided_at: '2026-10-22T17:30:00Z'
+    status: declined
+    category: OUT_OF_SCOPE
+    clause_ids: ['3.5']
+    confidence: 0.94
+    reason: 'Slack integration is outside the SOW deliverables.'
+    cr_id: CR-001
+    source_room: acme-client
+    source_message_id: msg-ask-0002
+    source_link: 'https://discord.com/channels/acme/acme-client/msg-ask-0002'
+  - id: ASK-0003
+    quote: 'Update the header buttons to use our Acme Indigo brand palette.'
+    requester: Sam
+    created_at: '2026-10-27T13:10:00Z'
+    decided_at: '2026-10-27T13:14:00Z'
+    status: accepted
+    category: IN_SCOPE
+    clause_ids: ['2.4']
+    confidence: 0.95
+    reason: 'Clause 2.4 includes brand colours.'
+    source_room: acme-client
+    source_message_id: msg-ask-0003
+    source_link: 'https://discord.com/channels/acme/acme-client/msg-ask-0003'
+  - id: ASK-0004
+    quote: 'Add role-based audit log export for compliance.'
+    requester: Sam
+    created_at: '2026-10-30T14:00:00Z'
+    decided_at: '2026-10-30T16:10:00Z'
+    status: accepted
+    category: OUT_OF_SCOPE
+    clause_ids: ['3.2']
+    confidence: 0.92
+    reason: 'Role-based audit log export is not covered by standard reports.'
+    cr_id: CR-002
+    source_room: acme-client
+    source_message_id: msg-ask-0004
+    source_link: 'https://discord.com/channels/acme/acme-client/msg-ask-0004'
+  - id: ASK-0005
+    quote: 'We need automated weekly email scheduling for saved reports.'
+    requester: Sam
+    created_at: '2026-11-02T14:30:00Z'
+    decided_at: '2026-11-02T16:00:00Z'
+    status: approved
+    category: OUT_OF_SCOPE
+    clause_ids: ['3.2']
+    confidence: 0.93
+    reason: 'Report scheduling is not in Clause 3.2 (filters and CSV export only).'
+    cr_id: CR-003
+    source_room: acme-client
+    source_message_id: msg-ask-0005
+    source_link: 'https://discord.com/channels/acme/acme-client/msg-ask-0005'
+  - id: ASK-0006
+    quote: 'Can we add a custom welcome banner message on the login screen for Q4?'
+    requester: Sam
+    created_at: '2026-11-03T15:20:00Z'
+    decided_at: '2026-11-03T15:45:00Z'
+    status: accepted
+    category: OUT_OF_SCOPE
+    clause_ids: ['1.1']
+    confidence: 0.89
+    reason: 'Custom promotional login banner is a small enhancement.'
+    source_room: acme-client
+    source_message_id: msg-ask-0006
+    source_link: 'https://discord.com/channels/acme/acme-client/msg-ask-0006'
+
+change_requests:
+  - id: CR-001
+    ask_id: ASK-0002
+    title: 'Slack integration'
+    room_id: acme-cr-001
+    created_at: '2026-10-22T15:05:00Z'
+    status: closed
+    confirmed_hours: 16
+    confirmed_by: ravi
+    approved_by: priya
+    approved_at: '2026-10-22T16:00:00Z'
+    client_choice: DECLINE
+    decided_at: '2026-10-22T17:30:00Z'
+    estimate:
+      full: { title: 'Slack webhook integration', p50_hours: 16, p90_hours: 20, confidence: high }
+      touches: ['api/notifications']
+      similar: [{ ref: 'merge: Auth refresh', hours: 18 }]
+      risks: []
+      assumptions: ['Incoming webhook only']
+      posted_at: '2026-10-22T15:15:00Z'
+    options:
+      - key: A
+        label: 'Full Slack integration now'
+        description: 'Add Slack daily report webhook'
+        hours: 16
+        price_cents: 76000
+        milestone_id: M2
+        shift_days: 1
+    envelope_result:
+      passed: false
+      failed_rules: ['max_price_usd', 'milestone_impact_days']
+  - id: CR-002
+    ask_id: ASK-0004
+    title: 'Role-based audit log export'
+    room_id: acme-cr-002
+    created_at: '2026-10-30T14:05:00Z'
+    status: decided
+    confirmed_hours: 20
+    confirmed_by: ravi
+    approved_by: priya
+    approved_at: '2026-10-30T15:15:00Z'
+    client_choice: A
+    decided_at: '2026-10-30T16:10:00Z'
+    estimate:
+      full: { title: 'Audit log export', p50_hours: 20, p90_hours: 24, confidence: high }
+      touches: ['api/audit', 'ui/settings']
+      similar: [{ ref: 'merge: Auth refresh', hours: 18 }]
+      risks: []
+      assumptions: ['CSV audit log format']
+      posted_at: '2026-10-30T14:20:00Z'
+    options:
+      - key: A
+        label: 'Build now'
+        description: 'Role-based audit log export'
+        hours: 20
+        price_cents: 95000
+        milestone_id: M2
+        shift_days: 1
+    envelope_result:
+      passed: false
+      failed_rules: ['max_price_usd', 'milestone_impact_days']
+  - id: CR-003
+    ask_id: ASK-0005
+    title: 'Report scheduling'
+    room_id: acme-cr-003
+    created_at: '2026-11-02T14:35:00Z'
+    status: decided
+    confirmed_hours: 40
+    confirmed_by: ravi
+    approved_by: priya
+    approved_at: '2026-11-02T15:30:00Z'
+    client_choice: A
+    decided_at: '2026-11-02T16:00:00Z'
+    estimate:
+      full: { title: 'Automated weekly report scheduling', p50_hours: 40, p90_hours: 48, confidence: high }
+      touches: ['api/reports', 'workers/scheduler']
+      similar: [{ ref: 'merge: Reports v1', hours: 40 }]
+      risks: ['Timezone handling for recipients']
+      assumptions: ['Uses existing email transport']
+      posted_at: '2026-11-02T14:50:00Z'
+    options:
+      - key: A
+        label: 'Build now'
+        description: 'Automated weekly email scheduling for saved reports'
+        hours: 40
+        price_cents: 189000
+        milestone_id: M2
+        shift_days: 2
+    envelope_result:
+      passed: false
+      failed_rules: ['max_price_usd', 'milestone_impact_days']
+
+goodwill:
+  - id: GW-0001
+    ask_id: ASK-0006
+    hours: 2
+    reason: 'Small Q4 welcome banner courtesy for Acme launch week'
+    approved_by: priya
+    month: '2026-11'
+    date: '2026-11-03'
+    link: 'https://slack.com/archives/acme-delivery/msg-gw-0001'

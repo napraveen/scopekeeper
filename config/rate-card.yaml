@@ -1,0 +1,4 @@
+currency: USD
+blended_rate: 45
+contingency: { high: 0.05, medium: 0.15, low: 0.25 }
+round_to: 10

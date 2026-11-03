@@ -169,9 +169,9 @@ scopekeeper/
   - Read the Switch docs and reference implementation (`core/switch_core/bridges/agent/`).
   - Write `docs/switch-protocol-notes.md`, `docs/decisions.md`, and `docs/plan.md`.
   - Every Switch operation needed is verified with exact signatures.
-- [ ] **Phase 1: Scaffold and domain**
+- [x] **Phase 1: Scaffold and domain**
   - Repo layout, tooling (`pyproject.toml`, `.env.example`, `justfile`, `docker-compose.yml`), `config/*` files, `switch/*` instruction/template files, config Pydantic models, and all `clerk/src/clerk/domain/` modules.
-  - Unit tests pass in `clerk/tests/unit` for prices, dates, swaps, envelope, goodwill, warranty post-rules, state transitions, parsers, numbers check, templates, and config loading; `mypy --strict` passes on `domain/`.
+  - Unit tests pass in `clerk/tests/unit` (65/65 passing, 96% domain coverage) for prices, dates, swaps, envelope, goodwill, warranty post-rules, state transitions, parsers, numbers check, templates, and config loading; `mypy --strict` and `ruff check` pass on `src/` and `tests/`.
 - [ ] **Phase 2: Fakes and golden path**
   - Ports, fake adapters (`InMemorySwitch`, `ScriptedLLM`, `LocalGitHost`, `FakePreview`, `SimulatedClock`), workflow services, and SQLAlchemy database + Alembic migrations.
   - The golden-path test (`clerk/tests/integration/test_overnight_story.py`) passes offline.
