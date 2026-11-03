@@ -181,9 +181,9 @@ scopekeeper/
 - [x] **Phase 4: Agents, git and previews**
   - Estimator and Builder flows, `GitHubHostAdapter` (`clerk/src/clerk/adapters/github.py`), enhanced `LocalGitHost` (`clerk/src/clerk/adapters/local_git.py`), `LocalPreviewAdapter` (`clerk/src/clerk/adapters/preview_local.py`), `scripts/preview_server.py`, live LLM provider adapters (`clerk/src/clerk/adapters/llm_providers.py` for Gemini, Anthropic, and OpenAI with repair retry & SHA-256 caching), `switch/` instruction & template files, and `docs/switch-setup.md`.
   - Contract tests pass (`clerk/tests/contract/test_git_preview_llm_adapters.py`; 81/81 total tests passing).
-- [ ] **Phase 5: Flip, brief, memory, renewal**
-  - Scheduler, handovers (`assume_role` / `release_role`), morning brief, memory queries, renewal report, and REST + SSE API matching the Frontend Data Contract.
-  - The 7:00 PM and 9:30 AM handovers work on the simulated clock.
+- [x] **Phase 5: Flip, brief, memory, renewal**
+  - `HandoverScheduler` (`clerk/src/clerk/workers/scheduler.py` using `APScheduler` `AsyncIOScheduler` + `SimulatedClock` boundary detector for `19:00` and `09:30` IST), `EstimatorTimeoutWorker` (`clerk/src/clerk/workers/timeouts.py` for 10-minute Estimator reminders and 30-minute heuristic fallback estimates), `FlipService` (`clerk/src/clerk/services/flip.py`), `BriefService` (`clerk/src/clerk/services/brief.py`), `MemoryService` (`clerk/src/clerk/services/memory.py`), and `RenewalService` (`clerk/src/clerk/services/renewal.py`).
+  - The 7:00 PM and 9:30 AM IST handovers, morning brief, memory queries, renewal report, and Estimator timeouts pass on the simulated clock (`clerk/tests/integration/test_phase5_handovers_brief_memory.py`).
 - [ ] **Phase 6: Dashboard (Skipped)**
   - Leave `dashboard/` empty for the separate frontend session; backend API & SSE stream verified against the frontend data contract with CORS enabled for `http://localhost:5173`.
 - [ ] **Phase 7: Demo app and seed**

@@ -8,24 +8,41 @@ from zoneinfo import ZoneInfo
 
 
 def parse_clock_offset(offset_str: str) -> timedelta:
-    """Parse a relative time offset such as '+10h', '+30m', '+2d', or '-1h'."""
+    """Parse a relative time offset such as '+10h', '+14h30m', '+30m', '+2d', or '-1h'."""
     cleaned = offset_str.strip()
-    match = re.match(
-        r"^([+-]?\d+(?:\.\d+)?)\s*(s|sec|secs|m|min|mins|h|hr|hrs|hours?|d|days?)$",
-        cleaned,
+    if not cleaned:
+        raise ValueError("Empty clock offset")
+
+    sign = -1.0 if cleaned.startswith("-") else 1.0
+    body = cleaned.lstrip("+-").strip()
+    token_pattern = re.compile(
+        r"(\d+(?:\.\d+)?)\s*(s|sec|secs|m|min|mins|h|hr|hrs|hours?|d|days?)",
         flags=re.IGNORECASE,
     )
-    if not match:
+    pos = 0
+    total = timedelta(0)
+    matched_any = False
+
+    for m in token_pattern.finditer(body):
+        if body[pos : m.start()].strip():
+            raise ValueError(f"Invalid clock offset {offset_str!r}; expected e.g. '+10h' or '+30m'")
+        matched_any = True
+        pos = m.end()
+        amount = float(m.group(1))
+        unit = m.group(2).lower()
+        if unit.startswith("s"):
+            total += timedelta(seconds=amount)
+        elif unit.startswith("m"):
+            total += timedelta(minutes=amount)
+        elif unit.startswith("h"):
+            total += timedelta(hours=amount)
+        else:
+            total += timedelta(days=amount)
+
+    if not matched_any or body[pos:].strip():
         raise ValueError(f"Invalid clock offset {offset_str!r}; expected e.g. '+10h' or '+30m'")
-    amount = float(match.group(1))
-    unit = match.group(2).lower()
-    if unit.startswith("s"):
-        return timedelta(seconds=amount)
-    if unit.startswith("m"):
-        return timedelta(minutes=amount)
-    if unit.startswith("h"):
-        return timedelta(hours=amount)
-    return timedelta(days=amount)
+
+    return total * sign
 
 
 class SystemClock:

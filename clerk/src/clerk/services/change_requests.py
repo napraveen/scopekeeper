@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from decimal import Decimal
 from typing import Literal
 
@@ -90,6 +91,7 @@ class ChangeRequestService:
         self._rate_card = rate_card
         self._envelope = envelope
         self._rooms_config = rooms_config
+        self._reminded_crs: set[str] = set()
 
     def _room_ref(self, name: str, app: ChatApp = ChatApp.SLACK) -> RoomRef:
         get_ref = getattr(self._switch, "get_room_ref", None)
@@ -314,6 +316,35 @@ class ChangeRequestService:
             posted_at=self._clock.now().isoformat(),
         )
         return await self.handle_estimate(cr_id, est)
+
+    async def check_estimator_timeouts(self) -> list[str]:
+        """Remind Estimator at 10 minutes and apply heuristic fallback at 30 minutes."""
+        now_dt = self._clock.now()
+        estimator_name = self._rooms_config.handles.estimator.lstrip("@")
+        actions: list[str] = []
+
+        for cr in self._repo.list_change_requests():
+            if cr.status != ChangeRequestStatus.ESTIMATING:
+                continue
+            created_dt = datetime.fromisoformat(cr.created_at.replace("Z", "+00:00"))
+            elapsed_mins = (now_dt - created_dt).total_seconds() / 60.0
+
+            if elapsed_mins >= 30.0:
+                await self.apply_heuristic_fallback_estimate(cr.id)
+                actions.append(f"fallback:{cr.id}")
+            elif elapsed_mins >= 10.0 and cr.id not in self._reminded_crs:
+                self._reminded_crs.add(cr.id)
+                cr_room = self._room_ref(cr.room.room, ChatApp.SLACK)
+                await self._switch.send_targeted(
+                    cr_room,
+                    targets=[estimator_name],
+                    text=(
+                        f"@{estimator_name} Reminder: please post the "
+                        f"`scopekeeper-estimate` block for {cr.id} ({cr.ask_id})."
+                    ),
+                )
+                actions.append(f"reminded:{cr.id}")
+        return actions
 
     async def confirm_hours(
         self,

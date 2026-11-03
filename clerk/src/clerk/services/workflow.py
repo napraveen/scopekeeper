@@ -65,6 +65,7 @@ from clerk.services.invoice import InvoiceService
 from clerk.services.memory import MemoryService
 from clerk.services.renewal import RenewalService
 from clerk.settings import ConfigBundle
+from clerk.workers.scheduler import HandoverScheduler
 
 
 def _slugify(text: str) -> str:
@@ -140,9 +141,15 @@ class WorkflowOrchestrator:
             envelope=config.envelope,
             rooms_config=config.rooms,
         )
-        self.memory_service = MemoryService(repo=repo)
+        self.memory_service = MemoryService(repo=repo, llm=llm)
         self.renewal_service = RenewalService(repo=repo, llm=llm)
         self.invoice_service = InvoiceService(repo=repo, scope_map=config.scope_map)
+        self.scheduler = HandoverScheduler(
+            flip_service=self.flip_service,
+            clock=clock,
+            schedule=config.schedule,
+            cr_service=self.cr_service,
+        )
 
     def _room_ref(self, name: str, app: ChatApp = ChatApp.SLACK) -> RoomRef:
         get_ref = getattr(self.switch, "get_room_ref", None)
@@ -741,6 +748,7 @@ class WorkflowOrchestrator:
                 delta = parse_clock_offset(cmd.offset)
                 new_dt = self.clock.advance(delta)
                 self.repo.set_setting("clock_iso", new_dt.isoformat())
+                await self.scheduler.tick()
                 await self.switch.post(
                     room_ref, f"🕒 Simulated clock advanced to `{new_dt.isoformat()}`."
                 )

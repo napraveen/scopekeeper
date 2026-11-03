@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+from typing import TYPE_CHECKING
 
 import structlog
 
 from clerk.domain.models import ChatApp
 from clerk.ports.protocols import RoomRef, SwitchEvent, SwitchPort
-from clerk.services.workflow import WorkflowOrchestrator
+
+if TYPE_CHECKING:
+    from clerk.services.workflow import WorkflowOrchestrator
 
 logger = structlog.get_logger(__name__)
 
