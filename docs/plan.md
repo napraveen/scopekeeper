@@ -189,5 +189,6 @@ scopekeeper/
 - [x] **Phase 7: Demo app and seed**
   - `demo-app/seed/seed_history.py` generating `demo-app/acme-portal` with 41 backdated commits, 8 `Effort-Hours:` merges, planted Safari date bug + Vitest test, unwired dark theme tokens, `seed-v1` tag, `pre-push` hook, and `scripts/reset_demo.py`.
   - `just seed` and `just reset` are repeatable in under a minute (`clerk/tests/integration/test_phase7_seed_and_reset.py`).
-- [ ] **Phase 8: Docs, CI and polish**
-  - `README.md`, `docs/architecture.md`, `docs/demo-script.md`, `.github/workflows/ci.yml`, and `switch/templates/scopekeeper.template.yaml` validation.
+- [x] **Phase 8: Docs, CI and polish**
+  - `README.md`, `docs/architecture.md`, `docs/demo-script.md`, `scripts/eval_classifier.py`, `clerk/Dockerfile`, `LICENSE`, `.github/workflows/ci.yml`, and `switch/templates/scopekeeper.template.yaml` validation tests (`clerk/tests/unit/test_switch_template.py`).
+  - Full test suite passes 100% green with 0 ruff errors and 0 mypy strict errors across all source files.

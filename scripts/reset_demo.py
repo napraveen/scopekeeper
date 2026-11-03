@@ -26,6 +26,7 @@ CLERK_SRC = REPO_ROOT / "clerk" / "src"
 if str(CLERK_SRC) not in sys.path:
     sys.path.insert(0, str(CLERK_SRC))
 
+from clerk.adapters.clock import SimulatedClock  # noqa: E402
 from clerk.adapters.switch_protocol import SwitchProtocolAdapter  # noqa: E402
 from clerk.db.repositories import LedgerRepository  # noqa: E402
 from clerk.db.session import (  # noqa: E402
@@ -55,7 +56,9 @@ def reset_git_repo(repo_path: Path) -> dict[str, Any]:
     if not (repo_path / ".git").exists():
         # If the repo hasn't been generated yet, generate it using seed_history.py
         seed_script = REPO_ROOT / "demo-app" / "seed" / "seed_history.py"
-        subprocess.run([sys.executable, str(seed_script)], check=True)
+        env = os.environ.copy()
+        env["DEMO_REPO_PATH"] = str(repo_path)
+        subprocess.run([sys.executable, str(seed_script)], env=env, check=True)
 
     # Prune any leftover git worktrees first
     subprocess.run(
@@ -183,7 +186,11 @@ async def run_reset_async(
     bundle = load_all_configs(cfg_dir)
 
     db_url = database_url or settings.database_url
-    repo_path = (demo_repo_path or settings.demo_repo_path).resolve()
+    if demo_repo_path:
+        repo_path = demo_repo_path.resolve()
+    else:
+        root_portal = (REPO_ROOT / "demo-app" / "acme-portal").resolve()
+        repo_path = root_portal if root_portal.exists() else settings.demo_repo_path.resolve()
     start_iso = clock_start or settings.clock_start
 
     engine = create_db_engine(db_url)
@@ -194,12 +201,14 @@ async def run_reset_async(
     live_switch = switch_adapter
     created_live_switch = False
     if live_switch is None and settings.clerk_agent_id and settings.clerk_api_key:
+        clock = SimulatedClock(start_iso)
         live_switch = SwitchProtocolAdapter(
             base_url=settings.switch_base_url,
             ws_url=settings.switch_ws_url,
             agent_id=settings.clerk_agent_id,
             api_key=settings.clerk_api_key,
             rooms_config=bundle.rooms,
+            clock=clock,
         )
         created_live_switch = True
 

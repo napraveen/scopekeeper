@@ -602,3 +602,92 @@ class ClassificationResult(BaseModel):
     reason: str
     question: str | None = None
     choices: list[str] = Field(default_factory=list)
+
+
+# ── Switch Template Models (switch/templates/*.template.yaml) ─────────────────
+
+
+class SwitchTemplateParam(BaseModel):
+    """Parameter definition in a Switch template."""
+
+    type: str
+    label: str | None = None
+    default: Any | None = None
+    input: str | None = None
+
+
+class SwitchTemplateAgent(BaseModel):
+    """Agent definition in a Switch template."""
+
+    name: str
+    display_name: str
+    description: str
+    provider: str
+    location: str
+    directory: str
+    addressing: str
+    allow_existing: bool = True
+    instructions: str
+
+
+class SwitchTemplateRole(BaseModel):
+    """Role definition inside a room in a Switch template."""
+
+    name: str
+    exclusive: bool = False
+    instructions: str
+
+
+class SwitchTemplateDoc(BaseModel):
+    """Attached document inside a room in a Switch template."""
+
+    name: str
+    description: str
+    instructions: str
+    content: str
+
+
+class SwitchTemplateRoom(BaseModel):
+    """Room definition in a Switch template."""
+
+    name: str
+    description: str
+    bridge: str
+    channel_type: str = "channel_public"
+    agents: list[str] = Field(default_factory=list)
+    users: list[str] = Field(default_factory=list)
+    instructions: str
+    roles: list[SwitchTemplateRole] = Field(default_factory=list)
+    docs: list[SwitchTemplateDoc] = Field(default_factory=list)
+    kickoff: str | None = None
+
+
+class SwitchTemplateLink(BaseModel):
+    """Link between rooms in a Switch template."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    from_: str = Field(alias="from")
+    to: str
+    label: str
+
+
+class SwitchTemplateGroup(BaseModel):
+    """Room group metadata in a Switch template."""
+
+    name: str
+    description: str
+    color: str
+
+
+class SwitchTemplate(BaseModel):
+    """Complete schema for switch/templates/*.template.yaml."""
+
+    version: int = Field(ge=1)
+    params: dict[str, SwitchTemplateParam] = Field(default_factory=dict)
+    agents: list[SwitchTemplateAgent] = Field(default_factory=list)
+    group: SwitchTemplateGroup
+    rooms: list[SwitchTemplateRoom] = Field(default_factory=list)
+    links: list[SwitchTemplateLink] = Field(default_factory=list)
+    form: dict[str, Any] = Field(default_factory=dict)
+

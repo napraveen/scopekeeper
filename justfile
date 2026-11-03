@@ -17,7 +17,7 @@ dev:
 test:
     cd clerk; uv run pytest
     cd clerk; uv run ruff check src tests
-    cd clerk; uv run mypy --strict src/clerk/domain
+    cd clerk; uv run mypy --strict src tests
 
 # Run classifier evaluation on the 20 fixture asks
 eval:
@@ -29,11 +29,11 @@ reset:
 
 # Trigger evening handover (7:00 PM IST Flip to Scout autopilot)
 flip:
-    cd clerk; uv run python -m clerk.cli flip-now
+    cd clerk; uv run python -m clerk.cli flip
 
 # Trigger morning brief & handover (9:30 AM IST Flip to Priya copilot)
 morning:
-    cd clerk; uv run python -m clerk.cli morning-now
+    cd clerk; uv run python -m clerk.cli morning
 
 # Start Docker Compose stack
 up:
