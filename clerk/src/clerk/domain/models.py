@@ -380,7 +380,7 @@ class StreamEvent(CamelModel):
 # ── Configuration Models (config/*.yaml) ──────────────────────────────────────
 
 
-class DeliverableSpec(BaseModel):
+class DeliverableSpec(CamelModel):
     """A deliverable clause in config/scope-map.yaml."""
 
     id: str
@@ -389,14 +389,14 @@ class DeliverableSpec(BaseModel):
     includes: list[str] = Field(default_factory=list)
 
 
-class ExclusionSpec(BaseModel):
+class ExclusionSpec(CamelModel):
     """An explicit exclusion clause in config/scope-map.yaml."""
 
     clause: str
     text: str
 
 
-class SwapPolicyConfig(BaseModel):
+class SwapPolicyConfig(CamelModel):
     """Scope swap rules in config/scope-map.yaml."""
 
     allowed: bool
@@ -404,7 +404,7 @@ class SwapPolicyConfig(BaseModel):
     only_unstarted: bool
 
 
-class ChangePolicyConfig(BaseModel):
+class ChangePolicyConfig(CamelModel):
     """Change control policy in config/scope-map.yaml."""
 
     goodwill_hours_per_month: int = Field(ge=0)
@@ -412,7 +412,7 @@ class ChangePolicyConfig(BaseModel):
     swap: SwapPolicyConfig
 
 
-class ScopeMapConfig(BaseModel):
+class ScopeMapConfig(CamelModel):
     """Validated schema for config/scope-map.yaml."""
 
     project: str
@@ -424,7 +424,7 @@ class ScopeMapConfig(BaseModel):
     change_policy: ChangePolicyConfig
 
 
-class ContingencyConfig(BaseModel):
+class ContingencyConfig(CamelModel):
     """Confidence contingency multipliers in config/rate-card.yaml."""
 
     high: Decimal = Field(ge=Decimal("0"))
@@ -440,7 +440,7 @@ class ContingencyConfig(BaseModel):
         return self.low
 
 
-class RateCardConfig(BaseModel):
+class RateCardConfig(CamelModel):
     """Validated schema for config/rate-card.yaml."""
 
     currency: str
@@ -449,7 +449,7 @@ class RateCardConfig(BaseModel):
     round_to: int = Field(gt=0)
 
 
-class EnvelopeConfig(BaseModel):
+class EnvelopeConfig(CamelModel):
     """Validated schema for config/envelope.yaml."""
 
     max_price_usd: Decimal = Field(ge=Decimal("0"))
@@ -458,7 +458,7 @@ class EnvelopeConfig(BaseModel):
     client_in_good_standing: bool
 
 
-class FlipScheduleConfig(BaseModel):
+class FlipScheduleConfig(CamelModel):
     """Handover times and participants in config/schedule.yaml."""
 
     to_agent_at: str = Field(pattern=r"^\d{2}:\d{2}$")
@@ -467,13 +467,13 @@ class FlipScheduleConfig(BaseModel):
     person: str
 
 
-class DemoScheduleConfig(BaseModel):
+class DemoScheduleConfig(CamelModel):
     """Simulated clock start time in config/schedule.yaml."""
 
     simulated_start: str
 
 
-class ScheduleConfig(BaseModel):
+class ScheduleConfig(CamelModel):
     """Validated schema for config/schedule.yaml."""
 
     agency_timezone: str

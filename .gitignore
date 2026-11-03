@@ -28,6 +28,7 @@ build/
 node_modules/
 demo-app/acme-portal/
 .worktrees/
+.previews/
 
 # IDE & OS
 .vscode/

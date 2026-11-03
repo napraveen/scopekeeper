@@ -184,10 +184,10 @@ scopekeeper/
 - [x] **Phase 5: Flip, brief, memory, renewal**
   - `HandoverScheduler` (`clerk/src/clerk/workers/scheduler.py` using `APScheduler` `AsyncIOScheduler` + `SimulatedClock` boundary detector for `19:00` and `09:30` IST), `EstimatorTimeoutWorker` (`clerk/src/clerk/workers/timeouts.py` for 10-minute Estimator reminders and 30-minute heuristic fallback estimates), `FlipService` (`clerk/src/clerk/services/flip.py`), `BriefService` (`clerk/src/clerk/services/brief.py`), `MemoryService` (`clerk/src/clerk/services/memory.py`), and `RenewalService` (`clerk/src/clerk/services/renewal.py`).
   - The 7:00 PM and 9:30 AM IST handovers, morning brief, memory queries, renewal report, and Estimator timeouts pass on the simulated clock (`clerk/tests/integration/test_phase5_handovers_brief_memory.py`).
-- [ ] **Phase 6: Dashboard (Skipped)**
-  - Leave `dashboard/` empty for the separate frontend session; backend API & SSE stream verified against the frontend data contract with CORS enabled for `http://localhost:5173`.
-- [ ] **Phase 7: Demo app and seed**
-  - `demo-app/seed/seed_history.py` generating `acme-portal` with 40 commits, 8 `Effort-Hours:` merges, planted Safari date bug, `seed-v1` tag, and `scripts/reset_demo.py`.
-  - `just seed` and `just reset` are repeatable in under a minute.
+- [x] **Phase 6: Dashboard (Skipped)**
+  - Leave `dashboard/` empty for the separate frontend session; backend API & SSE stream (`clerk/src/clerk/api/` and `clerk/src/clerk/main.py`) verified against the frontend data contract (`clerk/tests/integration/test_api_routes.py`) with CORS enabled for `http://localhost:5173` and `http://localhost:3000`.
+- [x] **Phase 7: Demo app and seed**
+  - `demo-app/seed/seed_history.py` generating `demo-app/acme-portal` with 41 backdated commits, 8 `Effort-Hours:` merges, planted Safari date bug + Vitest test, unwired dark theme tokens, `seed-v1` tag, `pre-push` hook, and `scripts/reset_demo.py`.
+  - `just seed` and `just reset` are repeatable in under a minute (`clerk/tests/integration/test_phase7_seed_and_reset.py`).
 - [ ] **Phase 8: Docs, CI and polish**
   - `README.md`, `docs/architecture.md`, `docs/demo-script.md`, `.github/workflows/ci.yml`, and `switch/templates/scopekeeper.template.yaml` validation.

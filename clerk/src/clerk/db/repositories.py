@@ -90,6 +90,10 @@ class LedgerRepository:
         self._default_plan = default_plan
         self._on_event = on_event
 
+    def set_on_event(self, callback: Callable[[StreamEvent], None] | None) -> None:
+        """Register or replace the callback invoked when a new `StreamEvent` is recorded."""
+        self._on_event = callback
+
     def session(self) -> Session:
         """Create a new SQLAlchemy session."""
         return self._session_factory()
