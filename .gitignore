@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Databases & local env
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.local
+
+# Node / Dashboard / Demo app
+node_modules/
+demo-app/acme-portal/
+.worktrees/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
