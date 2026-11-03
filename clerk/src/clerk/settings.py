@@ -41,36 +41,65 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # Switch connection
-    switch_url: str = "http://localhost:8700"
-    switch_agent_token: str = "dev-agent-token"
-    switch_admin_token: str = "dev-admin-token"
+    # Switch Server & Agent Credentials (.env.example Section 14)
+    switch_base_url: str = "http://localhost:8000"
+    switch_ws_url: str = "ws://localhost:8000"
+    switch_registration_key: str = ""
     clerk_agent_id: str = "clerk"
+    clerk_api_key: str = "dev-agent-token"
     clerk_display_name: str = "Clerk"
     clerk_model_name: str = "claude-sonnet-4-6"
 
-    # LLM provider for classification & brief phrasing
+    # Legacy aliases kept for backwards compatibility
+    switch_url: str = "http://localhost:8700"
+    switch_agent_token: str = "dev-agent-token"
+    switch_admin_token: str = "dev-admin-token"
+
+    # Scout Mode ("console" or "builtin")
+    scout_mode: Literal["console", "builtin"] = "console"
+    scout_agent_id: str = "acme-scout"
+    scout_api_key: str = ""
+
+    # LLM Provider ("gemini", "anthropic", "openai", or "scripted")
+    llm_provider: Literal["gemini", "anthropic", "openai", "scripted"] = "scripted"
     clerk_provider: Literal["anthropic", "openai", "google", "offline"] = "offline"
     clerk_model: str = "claude-sonnet-4-6"
+    gemini_api_key: str = ""
     anthropic_api_key: str = ""
     openai_api_key: str = ""
     google_api_key: str = ""
+    llm_model_fast: str = "gemini-2.5-flash"
+    llm_model_writer: str = "gemini-2.5-pro"
 
-    # Clerk HTTP server & storage
+    # Database & Local Paths
+    database_url: str = "sqlite:///./scopekeeper.db"
+    demo_repo_path: Path = Path("./demo-app/acme-portal")
+    target_repo_path: Path = Path("../target-repo")
+
+    # Git Host ("local" or "github")
+    git_host: Literal["local", "github"] = "local"
+    github_token: str = ""
+    github_repo: str = "pixel-and-co/acme-portal"
+
+    # Preview Server
+    preview_provider: Literal["local"] = "local"
+    preview_base_url: str = "http://localhost:4300"
+
+    # Clerk HTTP server & Security
     clerk_host: str = "0.0.0.0"
     clerk_port: int = 8090
     clerk_db_path: Path = Path("./data/clerk.db")
     clerk_config_dir: Path = Path("../config")
-    clerk_log_level: str = "INFO"
+    cors_origins: str = "http://localhost:5173,http://localhost:3000"
+    admin_token: str = "sk-admin-dev-token"
 
-    # Demo controls
+    # Demo & Clock Controls
+    demo_mode: bool = True
+    clock_start: str = "2026-11-05T19:00:00+05:30"
+    log_level: str = "info"
+    clerk_log_level: str = "INFO"
     clerk_demo_clock: bool = True
     clerk_demo_token: str = "scopekeeper-demo"
-
-    # Target codebase for Estimator & Builder
-    target_repo_path: Path = Path("../target-repo")
-    github_token: str = ""
-    github_repo: str = ""
 
 
 @dataclass(frozen=True)

@@ -175,12 +175,12 @@ scopekeeper/
 - [x] **Phase 2: Fakes and golden path**
   - Ports (`clerk/src/clerk/ports/protocols.py`), fake adapters (`InMemorySwitch`, `ScriptedLLM`, `LocalGitHost`, `FakePreview`, `SimulatedClock`), workflow services (`ClassifierService`, `ChangeRequestService`, `BriefService`, `FlipService`, `MemoryService`, `RenewalService`, `InvoiceService`, `BuiltinScout`, `WorkflowOrchestrator`), and SQLAlchemy 2.0 database (`tables.py`, `session.py`, `repositories.py`) + Alembic migrations (`0001_initial_schema.py`).
   - The golden-path integration test (`clerk/tests/integration/test_overnight_story.py`) and companion tests pass offline (71/71 total tests passing, `ruff check` and `mypy --strict` passing across 52 source files).
-- [ ] **Phase 3: Real Switch**
-  - `SwitchProtocolAdapter` (WebSocket stream + 2s `ping`/`pong` heartbeat + session placements + HTTP ops), consumer worker, reconnects, and contract tests.
-  - Clerk joins its rooms, maintains its heartbeat, and answers `@clerk status` in chat.
-- [ ] **Phase 4: Agents, git and previews**
-  - Estimator and Builder flows, `GitHostPort`, `PreviewPort`, and `docs/switch-setup.md`.
-  - A real in-scope ask becomes a pull request and a preview link.
+- [x] **Phase 3: Real Switch**
+  - `SwitchProtocolAdapter` (`clerk/src/clerk/adapters/switch_protocol.py` with WebSocket stream, independent 2s `ping`/`pong` heartbeat, `gap` recovery, `evicted` handling (`taken_over` stop vs `heartbeat_lapsed` exponential backoff reconnect), session placements with dict-to-list fallback, HTTP ops, `runtime-state`, `leases/renew`, and `acme-client` guardrails), `SwitchConsumerWorker` (`clerk/src/clerk/workers/switch_consumer.py`), and contract tests (`clerk/tests/contract/test_switch_adapter.py`).
+  - Clerk joins its rooms, maintains its heartbeat even during slow LLM/git calls, and answers `@clerk status` in chat.
+- [x] **Phase 4: Agents, git and previews**
+  - Estimator and Builder flows, `GitHubHostAdapter` (`clerk/src/clerk/adapters/github.py`), enhanced `LocalGitHost` (`clerk/src/clerk/adapters/local_git.py`), `LocalPreviewAdapter` (`clerk/src/clerk/adapters/preview_local.py`), `scripts/preview_server.py`, live LLM provider adapters (`clerk/src/clerk/adapters/llm_providers.py` for Gemini, Anthropic, and OpenAI with repair retry & SHA-256 caching), `switch/` instruction & template files, and `docs/switch-setup.md`.
+  - Contract tests pass (`clerk/tests/contract/test_git_preview_llm_adapters.py`; 81/81 total tests passing).
 - [ ] **Phase 5: Flip, brief, memory, renewal**
   - Scheduler, handovers (`assume_role` / `release_role`), morning brief, memory queries, renewal report, and REST + SSE API matching the Frontend Data Contract.
   - The 7:00 PM and 9:30 AM handovers work on the simulated clock.

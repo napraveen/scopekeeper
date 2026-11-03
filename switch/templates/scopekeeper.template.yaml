@@ -143,6 +143,15 @@ rooms:
         exclusive: false
         instructions: |
           Delivery Lead governance role (held by Ravi). Confirms or adjusts hours estimates.
+    docs:
+      - name: ledger-summary
+        description: Live monthly scope ledger, goodwill balance, and active swaps
+        instructions: Updated automatically by Clerk after each decision and morning brief.
+        content: |
+          # Scope Ledger — 2026-11
+          - Approved change orders: $1,890 (CR-002)
+          - Goodwill used: 1h / 6h (ASK-0006)
+          - Active swaps: 0
 
 links:
   - { from: acme-client, to: acme-intake, label: "asks in, client-ready answers out" }

@@ -1,7 +1,8 @@
-"""LocalGitHost adapter implementing GitHostPort with local ticket files and PR registry."""
+"""LocalGitHost adapter implementing GitHostPort with local ticket files and git inspection."""
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
 
 from clerk.ports.protocols import PullRequestRef, TicketRef
@@ -35,13 +36,42 @@ class LocalGitHost:
         return ticket
 
     async def ensure_branch(self, branch: str) -> str:
-        """Record or verify a `sk/ask-NNNN-<slug>` branch."""
-        self._branches.add(branch)
-        return branch
+        """Record or verify a `sk/ask-NNNN-<slug>` branch; reject `main` or `master`."""
+        cleaned = branch.strip()
+        if cleaned in {"main", "master"}:
+            raise ValueError(
+                f"Branch {cleaned!r} is protected; Builder must use sk/ask-NNNN-<slug>."
+            )
+        self._branches.add(cleaned)
+        return cleaned
 
     async def find_pull_request(self, branch: str) -> PullRequestRef | None:
-        """Return a registered pull request for `branch`, if any."""
-        return self._pull_requests.get(branch)
+        """Return a registered pull request or detect a committed branch in `repo_path`."""
+        if branch in self._pull_requests:
+            return self._pull_requests[branch]
+
+        if self._repo_path is not None and (self._repo_path / ".git").exists():
+            try:
+                proc = subprocess.run(
+                    ["git", "rev-parse", "--verify", f"refs/heads/{branch}"],
+                    cwd=self._repo_path,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                    timeout=5,
+                )
+                if proc.returncode == 0:
+                    pr = PullRequestRef(
+                        work_id="W-LOCAL",
+                        branch=branch,
+                        title=f"[{branch}] Local branch ready",
+                        url=f"http://localhost:4300/pr/{branch}",
+                    )
+                    self._pull_requests[branch] = pr
+                    return pr
+            except Exception:
+                pass
+        return None
 
     def register_pull_request(
         self, work_id: str, branch: str, title: str, url: str
