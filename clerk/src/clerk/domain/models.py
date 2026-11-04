@@ -652,7 +652,7 @@ class SwitchTemplateRoom(BaseModel):
 
     name: str
     description: str
-    bridge: str
+    bridge: str | None = None
     channel_type: str = "channel_public"
     agents: list[str] = Field(default_factory=list)
     users: list[str] = Field(default_factory=list)
