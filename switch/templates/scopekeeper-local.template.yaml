@@ -1,4 +1,15 @@
 version: 1
+
+params:
+  location:
+    type: location
+    description: The machine both run on.
+    default: local
+  provider:
+    type: provider
+    description: Which coding agent backs the agents.
+    default: [opencode, claude, codex, $first]
+
 group:
   name: Acme Web Portal
   description: Cross-company client desk and scope-to-delivery workflow for Acme Inc.
@@ -8,8 +19,8 @@ agents:
   - name: acme-scout
     display_name: Scout
     description: Client desk agent for Acme Web Portal
-    provider: opencode
-    location: local
+    provider: "{provider}"
+    location: "{location}"
     directory: "{$agents_dir}/acme-scout"
     addressing: anyone
     allow_existing: true
@@ -19,8 +30,8 @@ agents:
   - name: clerk
     display_name: Clerk
     description: ScopeKeeper contract, pricing, ledger, and handover engine
-    provider: opencode
-    location: local
+    provider: "{provider}"
+    location: "{location}"
     directory: "{$agents_dir}/clerk"
     addressing: anyone
     allow_existing: true
@@ -30,8 +41,8 @@ agents:
   - name: acme-estimator
     display_name: Estimator
     description: Read-only code and git-history estimator for acme-portal
-    provider: claude
-    location: local
+    provider: "{provider}"
+    location: "{location}"
     directory: "{$agents_dir}/acme-portal"
     addressing: owner-agents
     allow_existing: true
@@ -41,8 +52,8 @@ agents:
   - name: acme-builder
     display_name: Builder
     description: Branch-only implementation agent for acme-portal
-    provider: codex
-    location: local
+    provider: "{provider}"
+    location: "{location}"
     directory: "{$agents_dir}/acme-portal"
     addressing: owner-agents
     allow_existing: true
