@@ -10,7 +10,7 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from clerk.adapters.clock import SimulatedClock, SystemClock
 from clerk.adapters.github import GitHubHostAdapter
@@ -192,6 +192,65 @@ def create_app(
                 }
             },
         )
+
+    @app.get("/", response_class=HTMLResponse)
+    async def get_index() -> str:
+        return """<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ScopeKeeper Clerk</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; margin: 0; padding: 2rem; display: flex; justify-content: center; }
+      .card { max-width: 650px; width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+      h1 { font-size: 1.75rem; margin-top: 0; color: #38bdf8; display: flex; align-items: center; gap: 0.5rem; }
+      p { color: #94a3b8; line-height: 1.6; }
+      .badge { display: inline-block; background: #0369a1; color: #e0f2fe; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+      .links { margin-top: 1.5rem; display: grid; gap: 0.75rem; }
+      .btn { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1rem; background: #334155; color: #f8fafc; text-decoration: none; border-radius: 8px; font-weight: 500; transition: background 0.2s; }
+      .btn:hover { background: #475569; }
+      .btn-primary { background: #2563eb; }
+      .btn-primary:hover { background: #1d4ed8; }
+      .meta { font-size: 0.8rem; color: #64748b; margin-top: 1.5rem; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <span class="badge">ScopeKeeper Live</span>
+      <h1>🛡️ ScopeKeeper Clerk Backend</h1>
+      <p>The multi-agent scope-to-delivery governance backend on Switch is active and listening on port 8080.</p>
+      
+      <div class="links">
+        <a class="btn btn-primary" href="/docs" target="_blank">
+          <span>📚 Open Interactive API (Swagger UI)</span>
+          <span>&rarr;</span>
+        </a>
+        <a class="btn" href="/api/public/co/CR-002" target="_blank">
+          <span>📄 View Client Change Order (CR-002)</span>
+          <span>&rarr;</span>
+        </a>
+        <a class="btn" href="/api/health" target="_blank">
+          <span>💓 System Health & Simulated Clock</span>
+          <span>&rarr;</span>
+        </a>
+        <a class="btn" href="/api/desk" target="_blank">
+          <span>🕒 Desk State (@client-desk / The Flip)</span>
+          <span>&rarr;</span>
+        </a>
+        <a class="btn" href="/api/overview" target="_blank">
+          <span>📊 Monthly KPIs & Overview (Bearer auth)</span>
+          <span>&rarr;</span>
+        </a>
+        <a class="btn" href="/api/rooms" target="_blank">
+          <span>🗺️ Room Topology & Links (React Flow)</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+      <div class="meta">Flip the Switch Hackathon (Track 1: Best Business Workflow)</div>
+    </div>
+  </body>
+</html>"""
 
     app.include_router(api_router)
     return app
