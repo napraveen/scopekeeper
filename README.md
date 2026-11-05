@@ -36,7 +36,10 @@ Typical AI chat bots either summarize transcripts after the damage is done or na
 | Capability | Generic Scope Bot | ScopeKeeper |
 | :--- | :--- | :--- |
 | **Triple Cross-Platform Chat** | Single bot in one chat app | Bridges **Telegram (@AcmeClientDesk_bot - Client)**, **Discord (#general - Engineering)**, and **Slack (#general - Executive & Finance)** simultaneously using Switch Core 0.31. |
-| **Shift Handovers ("The Flip")** | Static 24/7 bot or human only | Autonomous **`assume_role` / `release_role`** handovers at 19:00 IST (evening autopilot) and 09:30 IST (morning copilot). |
+| **Interactive `!flip` Shift Handover** | Static 24/7 bot or human only | Live **`!flip`** command updates Switch Core PostgreSQL **`role_leases`** table to transition custody between **Day Copilot** (`@priya` Human AM) and **Night Autopilot** (`@acme-scout` & `@antigravity` AI) with multi-channel shift briefs. |
+| **Native Switch Document Store** | Hallucinates contract terms | Authoritative **SOW v1.2** contract stored directly in Switch Core PostgreSQL **`documents`** and **`room_documents`** tables; instant clause queries (`clause 5.1`, `clause 1.1`, `/documents`). |
+| **Official Signed SOW Amendments** | Informal chat agreements | Autonomous legal documentation: generates **`contracts/amendments/AMENDMENT_{CR}_{SLUG}.md`** with cryptographic SHA-256 audit digest, committed alongside implementation code. |
+| **1-Click GitHub PR Generator** | Requires manual git work | Autonomous Builder checks out dynamic feature branches, commits code & amendment, pushes to GitHub (`napraveen/scopekeeper`), and produces **1-Click pre-filled GitHub Pull Request URLs**. |
 | **Contract Boundaries** | LLM guesses scope loosely | Multi-tier classification: pre-checks (duplicate candidates & contradiction log) + Gemini AI + warranty post-rules. |
 | **Pricing Engine** | Hallucinated ranges ($500 - $5,000) | **Deterministic rate-card calculation**: blended rate × hours × confidence contingency + milestone buffer. |
 | **FastMCP Tool Server** | Proprietary closed plugins | Official **Model Context Protocol (MCP)** server ([`mcp_server.py`](mcp_server.py)) with 4 standard tools. |

@@ -9,66 +9,66 @@
 
 | Section | Timestamp | Focus Area | Key Screen / Visual |
 | :--- | :---: | :--- | :--- |
-| **1. The $5,000 Problem** | `0:00 - 0:35` | The Problem & Agency Pain | Title Slide + Ignition Report Stats |
-| **2. Client Request** | `0:35 - 1:15` | Live Switch Integration | Telegram Mobile App (`@AcmeClientDesk_bot`) |
-| **3. SOW Governance** | `1:15 - 1:55` | AI Reasoning & Change Order | Telegram Reply (`CR-003 Quote`) |
-| **4. Autonomous Build** | `1:55 - 2:30` | Autonomous Execution | Terminal Git Branch + Discord Alert (`#general`) |
-| **5. Mission Dashboard** | `2:30 - 3:00` | Full Architecture & Recap | React Dashboard (`localhost:5173`) + FastMCP |
+| **1. The $5,000 Problem** | `0:00 - 0:30` | Problem & Agency Pain | Title Slide + Ignition Report Stats |
+| **2. Native Switch Doc Store & !flip** | `0:30 - 1:00` | Switch Core Architecture | Discord/Slack (`!flip` & `/documents` query) |
+| **3. Client Request on Telegram** | `1:00 - 1:40` | Live Multi-Channel Mesh | Telegram Mobile App (`@AcmeClientDesk_bot`) |
+| **4. Autonomous Build, SOW Amendment & 1-Click PR** | `1:40 - 2:30` | Full Autonomous Execution | Git Commit + Signed Amendment + GitHub PR |
+| **5. Mission Control Dashboard** | `2:30 - 3:00` | Full Architecture & Recap | React Dashboard (`localhost:5173`) + FastMCP |
 
 ---
 
 ## 🎙️ Word-for-Word Voiceover & Action Script
 
-### [0:00 - 0:35] The $5,000 Problem
+### [0:00 - 0:30] The $5,000 Problem
 * **Visual:** Clean slide displaying:  
   *"57% of software agencies lose $1,000 to $5,000 every month to unbilled scope creep."*  
   *(Ignition 2025 State of Client Engagement Report)*
 * **Voiceover:**  
-  > *"Every software agency knows this pain: you sign a fixed Statement of Work for a client project. But as soon as the project starts, the client sends 'quick asks' in chat: 'Can we add Stripe checkout? Can you fix this button? Can we add export to CSV?'*  
-  > *Account managers hesitate to push back because they fear client friction. Developers end up working nights for free. And the agency bleeds thousands of dollars every month.*  
-  > *This is ScopeKeeper: an autonomous multi-agent governance and client desk system built on Switch Protocol for the Flip the Switch Hackathon."*
+  > *"Every software agency knows this pain: you sign a fixed Statement of Work for a client project. But as soon as work begins, clients send endless 'quick asks' in chat: 'Can we add Stripe checkout? Can you fix this button? Can we add export to CSV?'*  
+  > *Account managers hesitate to push back because they fear client friction. Developers work late nights for free. And the agency bleeds thousands of dollars every month.*  
+  > *This is ScopeKeeper: an autonomous multi-agent scope-to-delivery governance system built natively on Switch Protocol for the Flip the Switch Hackathon."*
 
 ---
 
-### [0:35 - 1:15] The Client Request on Telegram
-* **Visual:** Screen recording of Telegram (`@AcmeClientDesk_bot`). The client types and sends a message from their phone.
+### [0:30 - 1:00] Native Switch Document Store & Interactive !flip Shift Handover
+* **Visual:** Discord `#general` (Engineering squad). User types `!documents` and `!flip autopilot`.
+* **Prompt to Type on Discord:**  
+  `!documents`  
+  *then*  
+  `!flip autopilot`
+* **Voiceover:**  
+  > *"ScopeKeeper uses Switch Core's native PostgreSQL Document Store. When we send '!documents', Switch queries our room-linked authoritative SOW v1.2 contract.*  
+  > *Now, watch our standout feature: '!flip'!*  
+  > *At 7 PM, Priya triggers '!flip autopilot'. Switch immediately updates its 'role_leases' table: the Client Desk lease transfers to Scout AI, and Delivery Lead transfers to Antigravity.*  
+  > *Simultaneously, a synchronized night shift briefing broadcasts across Discord, Slack, and Telegram—confirming autonomous coverage until morning!"*
+
+---
+
+### [1:00 - 1:40] Client Request on Telegram & Deterministic Governance
+* **Visual:** Screen recording of Telegram (`@AcmeClientDesk_bot`). The client types from their phone.
 * **Prompt to Type on Telegram:**  
-  `Can we add Stripe checkout?`
+  `Can we add Stripe checkout for our customers?`
 * **Voiceover:**  
-  > *"Here, our client Sam from Acme Corp is chatting on Telegram. He doesn't need to join our internal tools—he talks to our client desk bot powered by Switch.*  
-  > *Sam asks: 'Can we add Stripe checkout?'*  
-  > *Behind the scenes, Switch Core routes this message through our multi-agent orchestrator. Scout—our client desk agent powered by Google Antigravity and Gemini AI—instantly evaluates the request against Acme's signed SOW v1.2 contract."*
-
----
-
-### [1:15 - 1:55] Deterministic SOW Governance & Approval
-* **Visual:** Telegram shows Scout's instant response:  
-  - SOW Classification: **Out-of-Scope (Change Order)**  
-  - Estimate: **18 hours @ $90.00/hr = $1,620.00**  
-  - Change Order ID: **`CR-003`**  
-  - Authorization prompt: *"Reply CONFIRM CR-003 to authorize."*
-* **Voiceover:**  
-  > *"Notice what just happened: Scout didn't hallucinate an arbitrary price. It checked the contract deliverables (D1, D2, D3), confirmed that payment processing is an excluded feature, and applied our deterministic SOW rate card of $90 an hour.*  
-  > *It offers Sam a formal quote: 18 hours, $1,620, under Change Order CR-003.*  
-  > *Now, Sam authorizes the work directly from Telegram."*
+  > *"Our client Sam from Acme Corp chats on Telegram. He doesn't need to learn new tools—he talks to our client desk bot.*  
+  > *Sam asks: 'Can we add Stripe checkout for our customers?'*  
+  > *Behind the scenes, Switch Core routes the message to Scout and Antigravity. It checks Clause 6.1 of our native SOW store, calculates 18 hours at our deterministic $90 rate, and quotes $1,620 under Change Order CR-003 with zero human delay!"*
 * **Prompt to Type on Telegram:**  
   `CONFIRM CR-003`
 
 ---
 
-### [1:55 - 2:30] Autonomous Git Build & Synchronized Cross-Platform Dispatch
+### [1:40 - 2:30] Autonomous Git Build, Signed SOW Amendment & 1-Click GitHub PR
 * **Visual:** Split-screen showing:  
-  1. Terminal showing real Git execution (`git checkout`, file write, `git commit`).  
-  2. Discord channel (`#general` in the agency server) receiving an automated engineering work order.  
-  3. Slack channel (`#general` in the executive workspace) receiving an automated revenue booking alert.
+  1. Terminal checking out dynamic branch `feature/cr-003-stripe-checkout`, writing the component, and committing.  
+  2. The generated official legal amendment `contracts/amendments/AMENDMENT_CR-003_stripe-checkout.md`.  
+  3. Discord receiving the alert with the **1-Click GitHub PR link**.  
+  4. Clicking the link to show GitHub's pre-filled Pull Request comparison page!
 * **Voiceover:**  
-  > *"As soon as Sam replies CONFIRM CR-003, ScopeKeeper flips into autonomous execution mode!*  
-  > *Watch the terminal: Builder automatically checks out a new branch: `feature/cr-003-stripe-portal`.*  
-  > *It writes the production React component, commits the code with message 'feat(stripe): autonomous CR-003 Stripe Checkout implementation', and grabs the commit hash.*  
-  > *Simultaneously, look at Discord and Slack!*  
-  > *Our engineering developers in Discord receive an immediate Engineering Work Order notification with the branch name and Git commit hash.*  
-  > *At the exact same second, our account executives and finance team in Slack receive an Executive Revenue Alert confirming +$1,620 booked to contract SOW v1.2 at an 82% profit margin!*  
-  > *Zero human delays. Zero unbilled scope creep. Full three-way synchronization across Telegram, Discord, and Slack via Switch Core."*
+  > *"The moment Sam types 'CONFIRM CR-003', ScopeKeeper executes the entire delivery pipeline autonomously!*  
+  > *Builder checks out a dynamic feature branch, generates the production React component, and produces an Official Signed SOW Amendment with cryptographic SHA-256 audit digest.*  
+  > *It commits and pushes directly to GitHub, and generates a pre-filled 1-Click Pull Request Compare URL.*  
+  > *In Discord and Slack, engineering and finance get the exact PR link to review and merge in one click, alongside the signed contract amendment.*  
+  > *Zero unbilled scope creep. Full legal and technical auditability."*
 
 ---
 
@@ -77,8 +77,8 @@
   Click through Mission Control, Scope Map, and the SOW Ledger.
 * **Voiceover:**  
   > *"Finally, here is the ScopeKeeper Mission Control Dashboard.*  
-  > *Agency leads can view their real-time protected revenue ticker, inspect the active SOW ledger, review change orders, and verify delivery milestones.*  
-  > *Everything you saw runs on 100% free infrastructure: Switch Core 0.31 native server, PostgreSQL, our Model Context Protocol server (mcp_server.py), and Google's Gemini Flash AI—with zero credit card required.*  
+  > *Agency leaders inspect real-time protected revenue, view the active SOW ledger, review change orders, and monitor margin health.*  
+  > *Everything you saw runs on 100% free infrastructure: Switch Core 0.31 native server, PostgreSQL, FastMCP (mcp_server.py), and Google's Gemini Flash AI—with zero credit card required.*  
   > *ScopeKeeper turns messy client scope into profitable, autonomous software delivery. Thank you!"*
 
 ---
@@ -90,4 +90,5 @@
 - [ ] ScopeKeeper Dashboard open at `http://localhost:5173/`
 - [ ] Telegram desktop / web open to `@AcmeClientDesk_bot`
 - [ ] Discord open to `#general` (guild `1562043658843201609`)
-- [ ] Clean test branch ready (e.g. `git branch -D feature/cr-003-stripe-portal` if rerunning)
+- [ ] Slack open to `#general` (`My Space`)
+- [ ] GitHub repository: `https://github.com/napraveen/scopekeeper`
