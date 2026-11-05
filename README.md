@@ -35,7 +35,7 @@ Typical AI chat bots either summarize transcripts after the damage is done or na
 
 | Capability | Generic Scope Bot | ScopeKeeper |
 | :--- | :--- | :--- |
-| **Cross-Company Chat** | Single bot in one chat app | Bridges **Telegram (@AcmeClientDesk_bot - External Client)** with **Discord (#general - Agency Engineering Team)** using Switch Core. |
+| **Triple Cross-Platform Chat** | Single bot in one chat app | Bridges **Telegram (@AcmeClientDesk_bot - Client)**, **Discord (#general - Engineering)**, and **Slack (#general - Executive & Finance)** simultaneously using Switch Core 0.31. |
 | **Shift Handovers ("The Flip")** | Static 24/7 bot or human only | Autonomous **`assume_role` / `release_role`** handovers at 19:00 IST (evening autopilot) and 09:30 IST (morning copilot). |
 | **Contract Boundaries** | LLM guesses scope loosely | Multi-tier classification: pre-checks (duplicate candidates & contradiction log) + Gemini AI + warranty post-rules. |
 | **Pricing Engine** | Hallucinated ranges ($500 - $5,000) | **Deterministic rate-card calculation**: blended rate × hours × confidence contingency + milestone buffer. |
@@ -93,6 +93,7 @@ A core architectural principle of ScopeKeeper is that **internal rates, margin d
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **`Acme Client Desk`** | Telegram | External client support, scope asks & quotes | Sam (`client`) | `@acme-scout` | `@client-desk` (exclusive) |
 | **`#general`** | Discord | Engineering team dispatch & work orders | Ravi (`delivery-lead`), Priya (`account-manager`) | `@clerk`, `@acme-builder`, `@antigravity` | `@delivery-lead`, `@builder` |
+| **`#general` (My Space)** | Slack | Executive & Finance desk (Revenue realization, scope creep alerts) | CFO, Agency Founder (`executive`) | `@antigravity`, `@clerk` | `@executive-desk` |
 | **`acme-intake`** | Switch Core | Internal triage & handoff between Scout and Clerk | Priya (`account-manager`) | `@acme-scout`, `@clerk` | *(Internal)* |
 | **`acme-delivery`** | Switch Core | Work order approval & sprint tracking | Ravi, Priya | `@clerk`, `@acme-builder` | *(Internal)* |
 
