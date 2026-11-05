@@ -1,0 +1,20 @@
+{
+  "key": "KAN-6",
+  "url": "https://napraveen.atlassian.net/browse/KAN-6",
+  "issue_type": "Story",
+  "summary": "[CR-003] Stripe Checkout ($0 Swap with Deliverable D3)",
+  "cr_id": "CR-003",
+  "title": "Stripe Checkout ($0 Swap with Deliverable D3)",
+  "hours": 0,
+  "cost": 0,
+  "clause": "Clause 6.1 (Equal-Size Scope Swaps)",
+  "branch": "feature/cr-003",
+  "labels": [
+    "change-order",
+    "sow-v1.2",
+    "billable"
+  ],
+  "status": "Ready for Dev (Sprint Backlog)",
+  "created_at": "2026-11-05 20:28:22 UTC",
+  "synced_live": true
+}

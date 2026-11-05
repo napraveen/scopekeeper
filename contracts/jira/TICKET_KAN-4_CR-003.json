@@ -1,0 +1,20 @@
+{
+  "key": "KAN-4",
+  "url": "https://napraveen.atlassian.net/browse/KAN-4",
+  "issue_type": "Story",
+  "summary": "[CR-003] Stripe Payment Gateway",
+  "cr_id": "CR-003",
+  "title": "Stripe Payment Gateway",
+  "hours": 18,
+  "cost": 1620,
+  "clause": "Clause 6.1 Change Control",
+  "branch": "feature/cr-003-stripe-portal",
+  "labels": [
+    "change-order",
+    "sow-v1.2",
+    "billable"
+  ],
+  "status": "Ready for Dev (Sprint Backlog)",
+  "created_at": "2026-11-05 20:03:19 UTC",
+  "synced_live": true
+}
