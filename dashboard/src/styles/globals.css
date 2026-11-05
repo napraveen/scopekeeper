@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './tokens.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
+
+  /* Type scale: 12, 14, 16, 20, 28, 40 */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-xl: 1.25rem;
+  --text-3xl: 1.75rem;
+  --text-5xl: 2.5rem;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-day: var(--day);
+  --color-night: var(--night);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  --color-cat-defect: var(--cat-defect);
+  --color-cat-defect-bg: var(--cat-defect-bg);
+  --color-cat-in-scope: var(--cat-in-scope);
+  --color-cat-in-scope-bg: var(--cat-in-scope-bg);
+  --color-cat-unclear: var(--cat-unclear);
+  --color-cat-unclear-bg: var(--cat-unclear-bg);
+  --color-cat-out: var(--cat-out);
+  --color-cat-out-bg: var(--cat-out-bg);
+  --color-cat-duplicate: var(--cat-duplicate);
+  --color-cat-duplicate-bg: var(--cat-duplicate-bg);
+  --color-cat-decided: var(--cat-decided);
+  --color-cat-decided-bg: var(--cat-decided-bg);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
+
+/* The day/night handover cross-fades the whole UI over 400 ms. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 400ms ease-out,
+    border-color 400ms ease-out,
+    color 400ms ease-out,
+    fill 400ms ease-out,
+    stroke 400ms ease-out !important;
+}
+
+@keyframes card-glow {
+  0% {
+    box-shadow: 0 0 0 0 var(--brand-glow);
+  }
+  30% {
+    box-shadow: 0 0 0 4px var(--brand-glow);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.animate-glow {
+  animation: card-glow 1.8s ease-out 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
