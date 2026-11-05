@@ -22,3 +22,7 @@ people:
     }
   ravi: { display: Ravi, username: ravi, side: agency, roles: [delivery-lead] }
   aisha: { display: Aisha, username: aisha, side: agency, roles: [] }
+  harish: { display: Harish, username: harish, side: client, roles: [] }
+  dhana: { display: Dhana, username: dhana, side: client, roles: [authorized-signer] }
+  sakthi: { display: Sakthi, username: sakthi, side: agency, roles: [account-manager, client-desk] }
+  bala: { display: Bala, username: bala, side: agency, roles: [delivery-lead, reviewer] }

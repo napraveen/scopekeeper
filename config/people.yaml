@@ -1,0 +1,43 @@
+client: acme
+project: Acme Web Portal
+sow_id: sow-contract-v1-2
+
+humans:
+  - key: harish
+    name: Harish
+    org: acme
+    title: Junior Frontend Dev
+    bridge: discord
+    authority: requester
+    notes: Client dev, asks for features, lacks budget approval authority
+
+  - key: dhana
+    name: Dhana
+    org: acme
+    title: Head of Product
+    bridge: telegram
+    authority: signer
+    cap_usd: 5000
+    notes: Authorized Signatory on SOW v1.2, approves change orders
+
+  - key: sakthi
+    name: Sakthi
+    org: agency
+    title: Lead Project Manager
+    location: console
+    roles: [account-manager, client-desk]
+    notes: Day Copilot leaseholder, client governance
+
+  - key: bala
+    name: Bala
+    org: agency
+    title: Delivery Lead & Reviewer
+    bridge: slack
+    roles: [delivery-lead, reviewer, on-call]
+    notes: Sizing confirmation, PR reviews via @builder lgtm
+
+envelope:
+  night_auto_approve_usd: 2000
+  rate_usd_per_hour: 90.0
+  warranty_clause: "Clause 5.1 & Section 4.3"
+  change_control_clause: "Clause 6.1"
