@@ -12,6 +12,16 @@ import json
 import httpx
 from datetime import datetime, timezone
 
+# Load .env variables automatically if present
+_env_path = os.path.join(r"f:\2026 - Projects\scopekeeper", ".env")
+if os.path.exists(_env_path):
+    with open(_env_path, "r", encoding="utf-8") as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith("#") and "=" in _line:
+                _k, _v = _line.split("=", 1)
+                os.environ[_k.strip()] = _v.strip()
+
 GOOGLE_SHEET_WEBHOOK_URL = os.environ.get("GOOGLE_SHEET_WEBHOOK_URL", "")
 GW_DIR = os.path.join(r"f:\2026 - Projects\scopekeeper", "contracts", "google_workspace")
 DOCS_DIR = os.path.join(GW_DIR, "docs")
@@ -92,7 +102,7 @@ async def sync_change_order_to_google_sheet(change_order_data: dict, build_res: 
             "pr_url": github_pr_url
         }
         try:
-            async with httpx.AsyncClient(timeout=6.0) as client:
+            async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
                 resp = await client.post(GOOGLE_SHEET_WEBHOOK_URL, json=payload)
                 if resp.status_code in [200, 201, 302]:
                     synced_webhook = True

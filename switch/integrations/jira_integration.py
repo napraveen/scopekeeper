@@ -14,11 +14,21 @@ import uuid
 import httpx
 from datetime import datetime, timezone
 
-# Optional environment configurations
+# Load .env variables automatically if present
+_env_path = os.path.join(r"f:\2026 - Projects\scopekeeper", ".env")
+if os.path.exists(_env_path):
+    with open(_env_path, "r", encoding="utf-8") as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith("#") and "=" in _line:
+                _k, _v = _line.split("=", 1)
+                os.environ[_k.strip()] = _v.strip()
+
+# Environment configurations
 JIRA_URL = os.environ.get("JIRA_URL", "https://scopekeeper.atlassian.net").rstrip("/")
 JIRA_EMAIL = os.environ.get("JIRA_EMAIL", "agency-lead@scopekeeper.io")
 JIRA_API_TOKEN = os.environ.get("JIRA_API_TOKEN", "")
-JIRA_PROJECT_KEY = os.environ.get("JIRA_PROJECT_KEY", "ACME")
+JIRA_PROJECT_KEY = os.environ.get("JIRA_PROJECT_KEY", "KAN")
 
 JIRA_DIR = os.path.join(r"f:\2026 - Projects\scopekeeper", "contracts", "jira")
 os.makedirs(JIRA_DIR, exist_ok=True)
@@ -164,6 +174,15 @@ async def create_jira_warranty_defect_bug(defect_text: str, reporter: str = "Cli
                     bug_key = data.get("key", bug_key)
                     jira_url = f"{JIRA_URL}/browse/{bug_key}"
                     synced_live = True
+                else:
+                    # Fallback to 'Task' issue type if 'Bug' is not configured in this project
+                    payload["fields"]["issuetype"] = {"name": "Task"}
+                    resp2 = await client.post(endpoint, json=payload, auth=auth)
+                    if resp2.status_code in [200, 201]:
+                        data2 = resp2.json()
+                        bug_key = data2.get("key", bug_key)
+                        jira_url = f"{JIRA_URL}/browse/{bug_key}"
+                        synced_live = True
         except Exception:
             pass
 
