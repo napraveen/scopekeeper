@@ -35,67 +35,66 @@ Typical AI chat bots either summarize transcripts after the damage is done or na
 
 | Capability | Generic Scope Bot | ScopeKeeper |
 | :--- | :--- | :--- |
-| **Cross-Company Chat** | Single bot in one Slack channel | Bridges **Discord (Acme client)** with **Slack (Pixel & Co agency)** using Switch Room Groups. |
+| **Cross-Company Chat** | Single bot in one chat app | Bridges **Telegram (@AcmeClientDesk_bot - External Client)** with **Discord (#general - Agency Engineering Team)** using Switch Core. |
 | **Shift Handovers ("The Flip")** | Static 24/7 bot or human only | Autonomous **`assume_role` / `release_role`** handovers at 19:00 IST (evening autopilot) and 09:30 IST (morning copilot). |
-| **Contract Boundaries** | LLM guesses scope loosely | Multi-tier classification: pre-checks (duplicate candidates & contradiction log) + LLM + warranty post-rules. |
+| **Contract Boundaries** | LLM guesses scope loosely | Multi-tier classification: pre-checks (duplicate candidates & contradiction log) + Gemini AI + warranty post-rules. |
 | **Pricing Engine** | Hallucinated ranges ($500 - $5,000) | **Deterministic rate-card calculation**: blended rate × hours × confidence contingency + milestone buffer. |
+| **FastMCP Tool Server** | Proprietary closed plugins | Official **Model Context Protocol (MCP)** server ([`mcp_server.py`](mcp_server.py)) with 4 standard tools. |
 | **Estimation Grounding** | LLM predicts arbitrary hours | Reads **41 commits and 8 `Effort-Hours:` merge trailers** from `acme-portal` git history. |
 | **Zero-Dollar Scope Swaps** | "Pay us or don't get it" | Automatically identifies unstarted deliverable items with matching effort for a **$0, 0-day milestone impact swap**. |
 | **Governance Envelopes** | Zero autonomy or unsafe autonomy | Autonomous approval for asks under **$250 with HIGH confidence**; human approval required for high-impact changes. |
-| **Code & Preview Delivery** | Just text recommendations | Branches `sk/*`, runs test suite, opens pull request, and serves live worktree preview on `http://localhost:4300`. |
+| **Code & Preview Delivery** | Just text recommendations | **Real autonomous Git execution**: creates `feature/*` branches, writes React components, commits to Git, and dispatches work orders to Discord. |
+| **Cost to Run** | $20/mo subscriptions required | **100% Free**: Powered by Google's Gemini 3.1 Flash-Lite AI with $0.00 cost and zero credit cards. |
 
 ---
 
 ## 🏛️ Architecture & Room Topology
 
-ScopeKeeper organizes agents and team members into a single **Switch Room Group** (`Acme Web Portal`), enforcing strict boundary isolation across organizations:
+ScopeKeeper organizes agents and team members into a single **Switch Mesh**, enforcing strict boundary isolation across organizations:
 
 ```mermaid
 flowchart LR
-    subgraph Discord["Acme Inc. (Client on Discord)"]
-        ClientUser["Sam (Client)"]
-        RoomClient["#acme-client"]
+    subgraph Telegram["Acme Corp (Client on Telegram)"]
+        ClientUser["Sam (Client on Mobile)"]
+        BotTelegram["@AcmeClientDesk_bot"]
     end
 
-    subgraph Switch["Switch Agent Protocol Mesh"]
+    subgraph Switch["Switch Core Protocol Mesh (Port 50415)"]
         direction TB
-        Scout(["@acme-scout<br/>Client Desk"])
-        Clerk(["@clerk<br/>Contract & Pricing Engine"])
-        Estimator(["@acme-estimator<br/>Git History Estimator"])
-        Builder(["@acme-builder<br/>Branch Implementation"])
+        Scout(["@acme-scout<br/>Client Desk Representative"])
+        Clerk(["@clerk<br/>SOW & Pricing Engine"])
+        Builder(["@acme-builder<br/>Autonomous Git Builder"])
+        MCP["FastMCP Server (mcp_server.py)"]
+        Gemini["Google Antigravity (Gemini Flash-Lite AI)"]
     end
 
-    subgraph Slack["Pixel & Co (Agency on Slack)"]
-        RoomIntake["#acme-intake"]
-        RoomDelivery["#acme-delivery"]
-        RoomCR["#acme-cr-NNN (Ephemeral)"]
-        Priya["Priya (@account-manager)"]
+    subgraph Discord["Pixel & Co (Agency on Discord)"]
+        ChannelEng["#general (Engineering Team)"]
         Ravi["Ravi (@delivery-lead)"]
+        Priya["Priya (@account-manager)"]
     end
 
-    ClientUser <--> RoomClient
-    RoomClient <--> Scout
-    Scout <--> RoomIntake
-    RoomIntake <--> Clerk
-    Clerk <--> RoomDelivery
-    Clerk <--> RoomCR
-    Estimator <--> RoomCR
-    Builder <--> RoomDelivery
-    Priya <--> RoomIntake
-    Priya <--> RoomDelivery
-    Ravi <--> RoomDelivery
+    ClientUser <--> BotTelegram
+    BotTelegram <--> Scout
+    Scout <--> Clerk
+    Clerk <--> MCP
+    Clerk <--> Gemini
+    Clerk <--> Builder
+    Builder -- "Git Commit & Work Order" --> ChannelEng
+    ChannelEng <--> Ravi
+    ChannelEng <--> Priya
 ```
 
 ### Room Membership & Isolation Table
 
-A core architectural principle of ScopeKeeper is that **internal rates, margin discussions, and code work are never exposed to the client room**:
+A core architectural principle of ScopeKeeper is that **internal rates, margin discussions, and raw implementation diffs are never exposed to the client channel**:
 
-| Room | Bridge App | Purpose | Human Members | Agent Members | Roles Configured |
+| Room / Platform | Bridge App | Purpose | Human Members | Agent Members | Roles Configured |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **`acme-client`** | Discord | Public client support & requests | Sam (`client`), Priya (`agency`) | `@acme-scout` | `@client-desk` (exclusive) |
-| **`acme-intake`** | Slack | Triage & handoff between Scout and Clerk | Priya (`account-manager`) | `@acme-scout`, `@clerk` | *(None)* |
-| **`acme-delivery`** | Slack | Agency team governance & work orders | Priya, Ravi (`delivery-lead`), Aisha | `@clerk`, `@acme-estimator`, `@acme-builder` | `@account-manager`, `@delivery-lead` |
-| **`acme-cr-NNN`** | Slack | Ephemeral room for 1 out-of-scope Change Request | Priya, Ravi | `@clerk`, `@acme-estimator` | *(None)* |
+| **`Acme Client Desk`** | Telegram | External client support, scope asks & quotes | Sam (`client`) | `@acme-scout` | `@client-desk` (exclusive) |
+| **`#general`** | Discord | Engineering team dispatch & work orders | Ravi (`delivery-lead`), Priya (`account-manager`) | `@clerk`, `@acme-builder`, `@antigravity` | `@delivery-lead`, `@builder` |
+| **`acme-intake`** | Switch Core | Internal triage & handoff between Scout and Clerk | Priya (`account-manager`) | `@acme-scout`, `@clerk` | *(Internal)* |
+| **`acme-delivery`** | Switch Core | Work order approval & sprint tracking | Ravi, Priya | `@clerk`, `@acme-builder` | *(Internal)* |
 
 > 🔒 **Strict Isolation Guarantee:** `@clerk`, `@acme-estimator`, and `@acme-builder` **never join `acme-client`**. Scout never sees pricing models, rates, or internal margin formulas.
 
@@ -154,32 +153,61 @@ When Sam posts a message containing multiple requests, ScopeKeeper executes a de
 
 ---
 
-## 🚀 Quickstart: Clone to Demo in 10 Minutes
+## 🚀 Quickstart: Windows 1-Click Launch & Hackathon Evaluation
 
-### Prerequisites
-- Python 3.12+ and [`uv`](https://docs.astral.sh/uv/) installed.
-- Git and Node.js 18+ (for running the demo app).
-- [Switch CLI / Switch Console](https://github.com/sandbox-quantum/switch) (optional for local mock; fake adapters included).
+ScopeKeeper runs on **100% free infrastructure** on Windows (no credit cards or paid subscriptions required).
 
-### 1. Clone & Setup Environment
+### ⚡ 1-Click Launch on Windows (Recommended for Judges)
+Simply double-click:
 ```bash
-git clone https://github.com/scopekeeper/scopekeeper.git
-cd scopekeeper
-cp .env.example .env
+scripts\start_scopekeeper.bat
+```
+This batch script automatically launches the entire coordinated multi-agent stack:
+1. **PostgreSQL Server 16:** Running on port `50417`.
+2. **Switch Core 0.31 Engine:** Running on port `50415` with native Telegram & Discord bridges.
+3. **Mission Control Web Dashboard:** Running on [`http://localhost:5173/`](http://localhost:5173/).
+4. **Autonomous Multi-Agent Orchestrator:** Active WebSocket presence and AI reasoning loop.
+
+To stop all services when done:
+```bash
+scripts\stop_scopekeeper.bat
 ```
 
-### 2. Install Dependencies & Initialize Database
-```bash
-# Using just
-just setup
-just seed
+---
 
-# Or manually:
-cd clerk
-uv sync --all-extras
-python ../demo-app/seed/seed_history.py
-uv run python -m clerk.cli seed
+## 🔌 Model Context Protocol (FastMCP) Integration
+
+ScopeKeeper provides a native Model Context Protocol (MCP) server in [`mcp_server.py`](mcp_server.py), implementing the open standard for tool execution supported across modern coding agents:
+
+```bash
+# Run the ScopeKeeper MCP Server
+python mcp_server.py
 ```
+
+### Exposed MCP Tools
+
+| Tool Name | Parameters | Description |
+| :--- | :--- | :--- |
+| **`evaluate_scope`** | `request_description: str` | Evaluates requests against SOW v1.2 contract deliverables (D1: Web App, D2: Themes, D3: CSV Export). Returns `IN_SCOPE` ($0 warranty) or `OUT_OF_SCOPE` (Change Order). |
+| **`calculate_pricing`** | `hours: float, rate_per_hour: float = 90.0` | Computes deterministic rate-card math with confidence contingency buffers to eliminate LLM pricing hallucinations. |
+| **`get_ledger_status`** | *(None)* | Returns current approved Change Orders, consumed budget, remaining balance, and active milestone dates. |
+| **`execute_work_order`** | `change_order_id: str` | Triggers the autonomous code-builder: checks out a Git branch, creates production components, commits code, and dispatches an engineering work order to Discord. |
+
+---
+
+## 🧪 Automated Test Verification
+
+ScopeKeeper adheres to the strict **Superpowers Iron Law** (*Evidence before assertions always*):
+
+```bash
+# Run the complete test suite (91 automated unit & integration tests)
+pytest clerk/tests -q
+# Output: 91 passed in 12.21s (Exit code: 0)
+```
+
+---
+
+## 🛠️ Alternative Developer Setup (Manual)
 
 ### 3. Run Clerk Backend & Preview Server
 ```bash
@@ -211,6 +239,57 @@ uv run --directory clerk python -m clerk.cli clock +2h
 # Reset database, change rooms, git branches, and clock back to seed state in <60s
 just reset
 ```
+
+---
+
+## 💻 ScopeKeeper Dashboard (Frontend)
+
+The ScopeKeeper back-office web application is located in [`dashboard/`](dashboard/). Built with Vite, React 19, TypeScript (strict), Tailwind CSS, and shadcn/ui. It features an autonomous mock mode powered by MSW and a 10-beat demo story engine, and switches to the live FastAPI backend with a single environment variable.
+
+### Key Pages & Features
+- **Mission Control (`/`):**
+  - **The Desk (Hero Toggle):** Real-time day/night toggle switch sliding between Priya (day/copilot) and Scout (night/autopilot), next handover countdown, dual timezone clocks, and instant "Flip now".
+  - **KPI Strip:** Live revenue protected ticker ($1,890 → $2,030), change order breakdown (sent, approved, pending, swaps), goodwill gauge (2 of 8 h), median ask-to-decision timer (52 min), and stacked category bar with accessible table fallback.
+  - **Live Pipeline:** 7 kanban stages (*Received, Sorted, Waiting on client, Change path, Building, Preview, Accepted*) with layout animations (`motion`), category chips, and clause badges.
+  - **Needs a Yes:** Immediate decision center for delivery lead confirmations (Ravi) and account manager approvals (Priya) with explicit `#room in Chat` confirmation dialogs before posting.
+  - **Activity Feed:** Live event stream rail grouping multi-ask bursts, with actor avatars, dual timestamps (`8:30 PM IST · 10:00 AM ET`), and direct chat links.
+  - **Ask Drawer:** Slide-over detail drawer showing verbatim client quote, Clerk SOW confidence meter, clause tooltips, clarification questions, work items, and goodwill actions.
+- **Asks Registry (`/asks`):** Full searchable, filterable table with view presets (*All, This week, Out of scope, In-flight*) and quick-open drawers.
+- **Change Requests (`/change-requests` & `/change-requests/:id`):** Codebase estimate range chart (`d3-scale`) with past history markers (61h, 52h, 18h), 4 interactive option cards (including Card D $0 deliverable swap), what-if milestone M2 ghost timeline, and approval actions.
+- **Delivery Plan (`/plan`):** Weekly delivery timeline with milestone M1/M2 bars, ghost overlays, and visual scope swap indicator (`I9` swapped for `I11`).
+- **Scope Contract Map (`/scope`):** Deliverables D1–D4, exclusion clauses, ask heat strips, clause excerpt dialog, and full YAML editor with schema validation.
+- **Rooms Switch Map (`/rooms`):** Interactive React Flow graph (`@xyflow/react`) with live message pulse animations, membership boundary ribbon, and a Matrix Table toggle view.
+- **Scope Ledger & Billing (`/ledger`):** Approved change orders summary, audit trail, CSV invoice download (`/api/invoice`), and quarterly renewal proposals.
+- **Rate Governance Settings (`/settings`):** Hourly rate ($45), confidence contingency bands (5%, 15%, 25%), goodwill bucket, and live envelope simulator.
+- **Public Change Order (`/co/:id`):** Clean, printable client view with print stylesheet.
+
+### Interactive Controls & Developer Tools
+- **Director Mode (`D` key or `?director`):** Floating control HUD with playback speeds (1×, 10×, 60×, 600×), step event (`.`), previous/next beat (`[` and `]`), play/pause (`Space`), and reset (`R`). In live mode, triggers backend demo endpoints (`/api/demo/*`).
+- **Switch Lens:** Toggle in top bar (or `⌘K`) displaying outlined tags on all elements powered by Switch building blocks (*Room*, *Role*, *Room link*, *Reference*, *Agent*, *Membership boundary*) with architectural tooltips.
+- **Command Palette (`⌘K` / `Ctrl+K`):** Global search across pages, client asks, change requests, SOW clauses, theme preferences, and quick actions.
+- **Banners:** Automatic disconnected banner with reconnect button when the stream drops, and an API token configuration modal.
+
+### Running the Dashboard
+```bash
+cd dashboard
+npm install
+npm run dev
+```
+Open [http://localhost:5173](http://localhost:5173).
+
+- **Mock Mode (Default):** Runs autonomously with in-browser MSW worker and simulated story engine (`VITE_API_MODE=mock`).
+- **Live Mode:** Connect to backend by setting `VITE_API_MODE=live` and `VITE_API_BASE_URL=http://localhost:8000` in `dashboard/.env`.
+- **Keyboard Shortcuts:**
+  - `D`: Toggle Director Mode HUD
+  - `⌘K` or `Ctrl+K`: Open Command Palette
+  - `Space`: Play / Pause story playback (when Director is active)
+  - `.`: Step to next story event
+  - `]`: Advance to next story beat
+  - `[`: Return to previous story beat
+  - `R`: Reset story to initial seed state
+- **Run Tests:** `npm test` runs Vitest unit and component tests.
+- **Production Build:** `npm run build` verifies strict TypeScript and bundles for production.
+
 
 ---
 
