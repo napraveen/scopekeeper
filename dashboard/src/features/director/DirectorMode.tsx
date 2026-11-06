@@ -66,19 +66,28 @@ export function DirectorMode() {
 
   if (!available || !directorOpen) return null
 
+  const progressPct = total > 0 ? Math.min(100, Math.round((cursor / total) * 100)) : 0
+
   return (
     <div
       role="region"
       aria-label="Director control panel"
-      className="fixed bottom-5 right-5 z-50 w-80 sm:w-96 rounded-2xl border border-border/90 bg-card/95 p-4 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-4 duration-200"
+      className="fixed bottom-5 right-5 z-50 w-84 sm:w-96 rounded-2xl border border-zinc-700/80 bg-zinc-950/95 text-zinc-100 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-xl animate-in fade-in slide-in-from-bottom-4 duration-200 select-none"
     >
-      <div className="flex items-center justify-between pb-3 border-b border-border/70">
+      {/* Header with live record dot */}
+      <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
         <div className="flex items-center gap-2">
-          <Zap className="size-4 text-primary" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
-            Director Mode
-          </h3>
-          <span className="rounded bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
+          <span className="relative flex size-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-75" />
+            <span className="relative inline-flex size-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]" />
+          </span>
+          <div className="flex items-center gap-1.5">
+            <Zap className="size-3.5 text-amber-400" />
+            <h3 className="text-xs font-black uppercase tracking-wider text-white">
+              Director Mode
+            </h3>
+          </div>
+          <span className="rounded bg-zinc-800/80 px-2 py-0.5 font-mono text-[10px] font-bold text-indigo-400 border border-zinc-700">
             {cursor} / {total}
           </span>
         </div>
@@ -86,21 +95,32 @@ export function DirectorMode() {
         <button
           type="button"
           onClick={() => setDirectorOpen(false)}
-          className="rounded p-1 text-muted-foreground hover:bg-secondary hover:text-foreground"
+          className="rounded-md p-1 text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
           aria-label="Close director panel"
         >
           <X className="size-4" />
         </button>
       </div>
 
+      {/* Story Progress Bar */}
+      <div className="mt-2.5 h-1.5 w-full bg-zinc-800/80 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-indigo-500 transition-all duration-300 shadow-[0_0_8px_rgba(99,102,241,0.6)]"
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+
       {/* Main playback controls */}
-      <div className="mt-3 flex items-center justify-between gap-1">
+      <div className="mt-3 flex items-center justify-between gap-1.5">
         <Button
           type="button"
           size="sm"
           variant={playing ? 'secondary' : 'default'}
           onClick={() => (playing ? demo().pause() : demo().play())}
-          className="gap-1.5 font-semibold text-xs flex-1"
+          className={cn(
+            'gap-1.5 font-bold text-xs flex-1 h-8 shadow-xs',
+            !playing && 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_12px_rgba(79,70,229,0.4)]',
+          )}
         >
           {playing ? <Pause className="size-3.5" /> : <Play className="size-3.5" />}
           <span>{playing ? 'Pause' : 'Play'}</span>
@@ -112,7 +132,7 @@ export function DirectorMode() {
           variant="outline"
           onClick={() => demo().step()}
           title="Step next event (Hotkey: .)"
-          className="gap-1 text-xs"
+          className="gap-1 text-xs h-8 bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-zinc-800 hover:text-white"
         >
           <SkipForward className="size-3.5" />
           <span>Step</span>
@@ -124,7 +144,7 @@ export function DirectorMode() {
           variant="outline"
           onClick={() => demo().reset()}
           title="Reset story (Hotkey: R)"
-          className="gap-1 text-xs"
+          className="gap-1 text-xs h-8 bg-zinc-900 border-zinc-700 text-zinc-200 hover:bg-zinc-800 hover:text-white"
         >
           <RotateCcw className="size-3.5" />
           <span>Reset</span>
@@ -132,9 +152,9 @@ export function DirectorMode() {
       </div>
 
       {/* Speed controls */}
-      <div className="mt-3 flex items-center justify-between gap-1 rounded-lg bg-secondary/50 p-1">
-        <span className="text-[11px] font-medium text-muted-foreground pl-2 flex items-center gap-1">
-          <FastForward className="size-3" /> Speed:
+      <div className="mt-3 flex items-center justify-between gap-1 rounded-xl bg-zinc-900/90 border border-zinc-800/80 p-1">
+        <span className="text-[11px] font-semibold text-zinc-400 pl-2 flex items-center gap-1">
+          <FastForward className="size-3 text-indigo-400" /> Speed:
         </span>
         <div className="flex gap-1">
           {SPEEDS.map((s) => (
@@ -143,10 +163,10 @@ export function DirectorMode() {
               type="button"
               onClick={() => demo().setSpeed(s)}
               className={cn(
-                'rounded px-2 py-0.5 font-mono text-xs font-semibold transition-colors',
+                'rounded-lg px-2.5 py-0.5 font-mono text-xs font-bold transition-all',
                 speed === s
-                  ? 'bg-primary text-primary-foreground shadow-xs'
-                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
+                  ? 'bg-indigo-600 text-white shadow-[0_0_8px_rgba(79,70,229,0.5)]'
+                  : 'text-zinc-400 hover:bg-zinc-800 hover:text-white',
               )}
             >
               {s}×
@@ -162,7 +182,7 @@ export function DirectorMode() {
           size="xs"
           variant="secondary"
           onClick={() => demo().flipNow()}
-          className="text-[11px]"
+          className="text-[11px] font-semibold h-7 bg-zinc-900 border border-zinc-800 text-zinc-200 hover:bg-zinc-800 hover:text-white"
         >
           Flip desk now
         </Button>
@@ -171,17 +191,17 @@ export function DirectorMode() {
           size="xs"
           variant="secondary"
           onClick={() => demo().morningNow()}
-          className="text-[11px]"
+          className="text-[11px] font-semibold h-7 bg-zinc-900 border border-zinc-800 text-amber-400 hover:bg-zinc-800 hover:text-amber-300"
         >
-          <Sun className="size-3 text-day mr-1" /> Morning now
+          <Sun className="size-3 mr-1" /> Morning now
         </Button>
       </div>
 
       {/* Ten beats dropdown / picker */}
-      <div className="mt-3 pt-2.5 border-t border-border/70 space-y-1.5">
-        <div className="flex justify-between items-center text-[11px] font-medium text-muted-foreground">
-          <span>Jump to Beat (hotkeys [ and ]):</span>
-          <span className="font-mono text-foreground font-semibold">
+      <div className="mt-3 pt-2.5 border-t border-zinc-800 space-y-1.5">
+        <div className="flex justify-between items-center text-[11px] font-semibold text-zinc-400">
+          <span>Jump to Beat (<kbd className="font-mono text-zinc-300">[</kbd> and <kbd className="font-mono text-zinc-300">]</kbd>):</span>
+          <span className="font-mono text-indigo-400 font-bold">
             {beatIndex >= 0 ? `${beatIndex + 1}/${beats.length}` : 'Start'}
           </span>
         </div>
@@ -195,16 +215,16 @@ export function DirectorMode() {
                 type="button"
                 onClick={() => demo().jumpToBeat(beat.id)}
                 className={cn(
-                  'w-full flex items-center justify-between rounded-md px-2 py-1 text-left text-xs transition-colors',
+                  'w-full flex items-center justify-between rounded-lg px-2.5 py-1 text-left text-xs transition-colors',
                   isCurrent
-                    ? 'bg-primary/15 font-semibold text-primary'
-                    : 'text-muted-foreground hover:bg-secondary/70 hover:text-foreground',
+                    ? 'bg-indigo-600/30 border border-indigo-500/50 font-bold text-white shadow-2xs'
+                    : 'text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200',
                 )}
               >
                 <span>
                   {idx + 1}. {beat.label}
                 </span>
-                {isCurrent && <span className="text-[10px] font-bold">● Active</span>}
+                {isCurrent && <span className="text-[10px] font-bold text-indigo-400">● Active</span>}
               </button>
             )
           })}

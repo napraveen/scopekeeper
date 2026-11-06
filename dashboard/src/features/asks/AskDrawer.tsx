@@ -27,10 +27,10 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { qk } from '@/lib/api/client'
 import { useAsk } from '@/lib/api/queries'
-import { person } from '@/lib/people'
 import { useQueryClient } from '@tanstack/react-query'
 import { useUiStore } from '@/stores/ui'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export function AskDrawer() {
   const navigate = useNavigate()
@@ -67,12 +67,12 @@ export function AskDrawer() {
       <Sheet open={open} onOpenChange={(isOpen) => !isOpen && setActiveAskId(null)}>
         <SheetContent
           side="right"
-          className="w-full sm:max-w-lg p-0 overflow-y-auto flex flex-col gap-0 border-l border-border bg-card"
+          className="w-full sm:max-w-lg p-0 overflow-y-auto flex flex-col gap-0 border-l border-border/80 glass-card"
         >
-          <SheetHeader className="p-5 border-b border-border/80 sticky top-0 bg-card/95 backdrop-blur z-10">
+          <SheetHeader className="p-5 border-b border-border/80 sticky top-0 bg-card/95 backdrop-blur-md z-10">
             <div className="flex items-center justify-between pr-6">
-              <div className="flex items-center gap-2">
-                <SheetTitle className="font-mono text-base font-bold text-foreground">
+              <div className="flex items-center gap-2.5">
+                <SheetTitle className="font-mono text-lg font-extrabold text-foreground tracking-tight">
                   {activeAskId}
                 </SheetTitle>
                 {ask?.category && <CategoryChip category={ask.category} size="xs" />}
@@ -85,23 +85,23 @@ export function AskDrawer() {
           </SheetHeader>
 
           {isLoading || !ask ? (
-            <div className="p-5 space-y-4">
-              <Skeleton className="h-20 w-full rounded-xl" />
-              <Skeleton className="h-32 w-full rounded-xl" />
-              <Skeleton className="h-44 w-full rounded-xl" />
+            <div className="p-6 space-y-4">
+              <Skeleton className="h-24 w-full rounded-2xl" />
+              <Skeleton className="h-36 w-full rounded-2xl" />
+              <Skeleton className="h-48 w-full rounded-2xl" />
             </div>
           ) : (
-            <div className="p-5 space-y-6">
-              {/* The Quote in large type */}
-              <div className="rounded-xl border border-border bg-secondary/25 p-4 space-y-2">
+            <div className="p-6 space-y-6">
+              {/* The Quote in large type with Quote card styling */}
+              <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-secondary/35 p-5 space-y-3 shadow-2xs">
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <Avatar id={ask.requester} size="sm" showName />
-                    <span className="text-xs text-muted-foreground">in #acme-client</span>
+                    <span className="text-xs font-semibold text-muted-foreground">in #acme-client</span>
                   </div>
                   <DualTime iso={ask.createdAt} relative />
                 </div>
-                <blockquote className="text-base font-medium text-foreground leading-snug">
+                <blockquote className="text-base font-semibold text-foreground leading-snug">
                   “{ask.quote}”
                 </blockquote>
                 <div className="pt-1">
@@ -109,10 +109,10 @@ export function AskDrawer() {
                 </div>
               </div>
 
-              {/* Verdict */}
-              <div className="rounded-xl border border-border bg-secondary/15 p-4 space-y-3">
+              {/* Contract Verdict */}
+              <div className="rounded-2xl border border-border/80 bg-card/75 p-5 space-y-4 shadow-2xs">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                     Contract Verdict
                   </h4>
                   <SwitchTag kind="Agent · Custom" label="Agent · Clerk" />
@@ -126,16 +126,19 @@ export function AskDrawer() {
                 </div>
 
                 {typeof ask.confidence === 'number' && (
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[11px] text-muted-foreground">
-                      <span>Clerk classification confidence</span>
-                      <span className="font-mono font-medium text-foreground">
+                  <div className="space-y-1.5 pt-1">
+                    <div className="flex justify-between text-xs font-medium text-muted-foreground">
+                      <span>Clerk contract classification confidence</span>
+                      <span className="font-mono font-bold text-foreground">
                         {Math.round(ask.confidence * 100)}%
                       </span>
                     </div>
-                    <div className="h-1.5 w-full bg-secondary rounded-full overflow-hidden">
+                    <div className="h-2 w-full bg-secondary rounded-full overflow-hidden p-0.5">
                       <div
-                        className="h-full bg-primary rounded-full"
+                        className={cn(
+                          'h-full rounded-full transition-all duration-500',
+                          ask.confidence >= 0.85 ? 'bg-emerald-500' : 'bg-primary',
+                        )}
                         style={{ width: `${Math.round(ask.confidence * 100)}%` }}
                       />
                     </div>
@@ -143,15 +146,15 @@ export function AskDrawer() {
                 )}
 
                 {ask.reason && (
-                  <p className="text-xs text-foreground leading-relaxed">
-                    <span className="font-semibold">Reason:</span> {ask.reason}
+                  <p className="text-xs text-foreground leading-relaxed pt-1">
+                    <span className="font-bold text-foreground">SOW Rationale:</span> {ask.reason}
                   </p>
                 )}
 
                 {ask.decisionId && (
-                  <div className="rounded-lg border border-border/80 bg-background/80 p-2.5 text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">Governing decision:</span>{' '}
-                    <span className="font-mono text-primary font-medium">{ask.decisionId}</span> (Notifications are email-only; no SMS)
+                  <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 text-xs text-foreground space-y-1">
+                    <span className="font-bold text-primary">Precedent Decision:</span>{' '}
+                    <span className="font-mono font-bold">{ask.decisionId}</span> (Notifications are email-only; no SMS)
                   </div>
                 )}
 
@@ -163,9 +166,9 @@ export function AskDrawer() {
                       variant="outline"
                       size="sm"
                       onClick={() => setGoodwillOpen(true)}
-                      className="gap-1.5 text-xs font-medium w-full"
+                      className="gap-2 text-xs font-bold w-full h-9 border-amber-500/40 hover:bg-amber-500/10 hover:border-amber-500 text-foreground transition-all"
                     >
-                      <HeartHandshake className="size-3.5 text-primary" />
+                      <HeartHandshake className="size-4 text-amber-500" />
                       <span>Cover with goodwill (2 h from 8 h bucket)</span>
                     </Button>
                   </div>
@@ -174,19 +177,19 @@ export function AskDrawer() {
 
               {/* Clarification Question if any */}
               {ask.question && (
-                <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-amber-600 dark:text-amber-400">
+                <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-300">
                     <HelpCircle className="size-4" />
                     <span>Clarification Question</span>
                   </div>
-                  <p className="text-xs text-foreground font-medium">{ask.question.text}</p>
+                  <p className="text-xs text-foreground font-semibold leading-relaxed">{ask.question.text}</p>
                   {ask.question.answer ? (
-                    <div className="rounded border border-amber-500/20 bg-background p-2 text-xs">
-                      <span className="text-muted-foreground">Client answer: </span>
-                      <span className="font-semibold text-foreground">{ask.question.answer}</span>
+                    <div className="rounded-xl border border-amber-500/20 bg-card/90 p-3 text-xs shadow-2xs">
+                      <span className="text-muted-foreground font-medium">Client answer: </span>
+                      <span className="font-bold text-foreground">“{ask.question.answer}”</span>
                     </div>
                   ) : (
-                    <p className="text-[11px] text-amber-600/80 dark:text-amber-400/80">
+                    <p className="text-xs text-amber-600/90 dark:text-amber-400/90 italic">
                       Waiting for client answer in #acme-client...
                     </p>
                   )}
@@ -195,9 +198,9 @@ export function AskDrawer() {
 
               {/* Linked Change Request & Work Items */}
               {(ask.crId || ask.workItems.length > 0) && (
-                <div className="space-y-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Execution &amp; Previews
+                <div className="space-y-3.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Execution &amp; Live Previews
                   </h4>
 
                   {ask.crId && (
@@ -207,14 +210,20 @@ export function AskDrawer() {
                         setActiveAskId(null)
                         navigate(`/change-requests/${ask.crId}`)
                       }}
-                      className="w-full flex items-center justify-between rounded-lg border border-border p-3 text-xs bg-background hover:border-primary/60 transition-colors text-left"
+                      className="w-full flex items-center justify-between rounded-xl border border-border/80 p-3.5 text-xs bg-card hover:border-primary/60 hover:shadow-sm transition-all text-left group"
                     >
-                      <div className="flex items-center gap-2">
-                        <Layers className="size-4 text-primary" />
-                        <span className="font-semibold text-foreground">Change Request</span>
-                        <span className="font-mono font-medium text-primary">{ask.crId}</span>
+                      <div className="flex items-center gap-2.5">
+                        <div className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                          <Layers className="size-4" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-foreground group-hover:text-primary transition-colors">
+                            Change Request {ask.crId}
+                          </div>
+                          <div className="text-[10px] text-muted-foreground">Click to inspect options &amp; timeline</div>
+                        </div>
                       </div>
-                      <span className="rounded bg-secondary px-2 py-0.5 font-medium capitalize text-foreground flex items-center gap-1">
+                      <span className="rounded-full bg-secondary border border-border/60 px-2.5 py-0.5 font-bold font-mono text-[10px] uppercase text-foreground flex items-center gap-1">
                         {ask.status.replace('_', ' ')}
                         <ExternalLink className="size-3 text-muted-foreground" />
                       </span>
@@ -224,31 +233,30 @@ export function AskDrawer() {
                   {ask.workItems.map((work) => (
                     <div
                       key={work.id}
-                      className="rounded-lg border border-border p-3 text-xs bg-background space-y-2"
+                      className="rounded-xl border border-border/80 p-4 text-xs bg-card/95 space-y-2.5 shadow-2xs"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">{work.title}</span>
-                        <span className="rounded bg-secondary px-2 py-0.5 text-[10px] uppercase font-mono text-muted-foreground">
+                        <span className="font-bold text-foreground text-xs">{work.title}</span>
+                        <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] uppercase font-mono font-bold text-muted-foreground">
                           {work.status}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-muted-foreground font-mono text-[11px]">
-                        <GitBranch className="size-3 text-primary" />
-                        <span>{work.branch}</span>
+                      <div className="flex items-center gap-2 text-muted-foreground font-mono text-xs">
+                        <GitBranch className="size-3.5 text-primary" />
+                        <span className="font-semibold text-foreground">{work.branch}</span>
                       </div>
 
-                      <div className="flex flex-wrap gap-3 pt-1">
+                      <div className="flex flex-wrap gap-4 pt-1 border-t border-border/60">
                         {work.prUrl && (
                           <a
                             href={work.prUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-primary hover:underline"
+                            className="inline-flex items-center gap-1.5 text-primary font-bold hover:underline"
                           >
-                            <GitPullRequest className="size-3" />
-                            <span>View Pull Request</span>
-                            <ExternalLink className="size-2.5" />
+                            <GitPullRequest className="size-3.5" />
+                            <span>View Pull Request #{work.id.replace(/\D/g, '') || '12'}</span>
                           </a>
                         )}
                         {work.previewUrl && (
@@ -256,11 +264,10 @@ export function AskDrawer() {
                             href={work.previewUrl}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium hover:underline"
+                            className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold hover:underline"
                           >
-                            <Globe className="size-3" />
-                            <span>Live Preview Ready</span>
-                            <ExternalLink className="size-2.5" />
+                            <Globe className="size-3.5" />
+                            <span>Live Worktree Preview</span>
                           </a>
                         )}
                       </div>
@@ -268,47 +275,19 @@ export function AskDrawer() {
                   ))}
                 </div>
               )}
-
-              {/* Vertical timeline of events */}
-              <div className="space-y-3">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  Ask Timeline
-                </h4>
-
-                <div className="relative border-l-2 border-border/80 ml-3 space-y-4 pl-4 pb-2">
-                  {ask.events.map((ev) => (
-                    <div key={ev.id} className="relative group text-xs">
-                      <div className="absolute -left-[21px] top-1 size-2 rounded-full bg-primary ring-4 ring-card" />
-                      <div className="flex flex-wrap items-baseline justify-between gap-1">
-                        <div className="flex items-center gap-1.5 font-semibold text-foreground">
-                          <Avatar id={ev.actor} size="xs" />
-                          <span>{person(ev.actor).name}</span>
-                        </div>
-                        <DualTime iso={ev.ts} className="text-[11px]" />
-                      </div>
-                      <p className="mt-1 text-foreground leading-relaxed">{ev.text}</p>
-                      {ev.link && (
-                        <div className="mt-1">
-                          <ChatLink link={ev.link} variant="open" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
         </SheetContent>
       </Sheet>
 
-      {goodwillOpen && ask && (
+      {/* Goodwill Confirmation Dialog */}
+      {goodwillOpen && (
         <ConfirmPost
           open={goodwillOpen}
           onOpenChange={setGoodwillOpen}
-          title="Cover with Goodwill"
-          target={{ app: 'slack', room: 'acme-intake', url: 'https://pixelco.slack.com/archives/acme-intake' }}
-          message={`Priya: I am covering ${ask.id} ("${ask.quote}") with 2 hours from our monthly goodwill bucket. No charge to Acme.`}
-          confirmLabel="Apply goodwill"
+          title={`Cover ${ask?.id} with Goodwill?`}
+          target={{ app: 'slack', room: 'acme-intake', url: 'https://slack.com' }}
+          message={`@clerk GOODWILL ${ask?.id} hours=2 approved_by=priya`}
           onConfirm={handleGoodwillConfirm}
         />
       )}

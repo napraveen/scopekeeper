@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ChevronDown, ChevronRight, Radio } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import { Avatar } from '@/components/Avatar'
 import { ChatLink } from '@/components/ChatLink'
 import { DualTime } from '@/components/DualTime'
@@ -117,117 +117,131 @@ export function ActivityFeed() {
       })
     }
 
-    return list
+    return list.slice(0, 30)
   }, [events])
 
   if (isLoading) {
     return (
-      <aside aria-label="Live activity feed" className="rounded-xl border border-border bg-card p-4">
-        <Skeleton className="h-5 w-32 mb-3" />
-        <div className="space-y-4">
+      <section aria-label="Live event activity feed" className="rounded-2xl border border-border/80 glass-card p-5">
+        <Skeleton className="h-6 w-36 mb-4" />
+        <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="flex gap-2.5">
-              <Skeleton className="size-7 rounded-full shrink-0" />
-              <div className="space-y-1.5 flex-1">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-3 w-1/2" />
-              </div>
-            </div>
+            <Skeleton key={i} className="h-16 rounded-xl" />
           ))}
         </div>
-      </aside>
+      </section>
     )
   }
 
-  // Text for aria-live announce
-  const newestEventText = items[0]?.title ?? ''
-
   return (
-    <aside
-      aria-label="Live activity feed"
-      className="flex flex-col rounded-xl border border-border bg-card p-4 h-full"
-    >
-      <div className="mb-3 flex items-center justify-between pb-2 border-b border-border/60">
-        <div className="flex items-center gap-2">
-          <Radio className="size-3.5 text-emerald-500 animate-pulse" aria-hidden="true" />
-          <h2 className="text-base font-semibold text-foreground">Activity feed</h2>
+    <section aria-label="Live event activity feed" className="rounded-2xl border border-border/80 glass-card p-5 sm:p-6 shadow-sm">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2">
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+            </span>
+            <h2 className="text-base font-bold tracking-tight text-foreground">Activity Stream</h2>
+          </div>
+          <span className="tabular rounded-full bg-secondary/80 border border-border/50 px-2 py-0.5 font-mono text-xs font-semibold text-muted-foreground">
+            {events?.length ?? 0} events
+          </span>
           <SwitchTag kind="Room link" label="Switch stream" />
         </div>
-        <span className="tabular font-mono text-xs text-muted-foreground">
-          {items.length} items
+        <span className="text-xs font-medium text-muted-foreground">
+          Live feed mirrored from Discord &amp; Slack rooms
         </span>
       </div>
 
-      {/* Screen reader polite announcement of live stream updates */}
-      <div aria-live="polite" aria-atomic="true" className="sr-only">
-        {newestEventText}
-      </div>
-
-      <div className="flex-1 overflow-y-auto space-y-3.5 pr-1 max-h-[780px] scrollbar-thin">
-        {items.length === 0 ? (
-          <div className="p-4 text-center text-xs text-muted-foreground">
-            No live events received yet.
-          </div>
-        ) : (
-          items.map((item) => {
-            const isExpanded = item.groupId ? Boolean(expandedGroups[item.groupId]) : false
-
+      <div
+        role="feed"
+        aria-label="Activity stream"
+        aria-live="polite"
+        className="relative space-y-3.5 before:absolute before:bottom-3 before:top-3 before:left-4 before:w-px before:bg-border/70"
+      >
+        {items.map((item) => {
+          if (item.isGroup && item.groupId) {
+            const isExpanded = expandedGroups[item.groupId] ?? false
             return (
               <div
                 key={item.id}
-                className="group relative flex gap-2.5 text-xs transition-opacity"
+                className="relative flex flex-col gap-2 rounded-xl border border-border/70 bg-secondary/25 p-3.5 pl-11 transition-all hover:border-primary/40 hover:bg-secondary/40"
               >
-                <div className="pt-0.5 shrink-0">
-                  <Avatar id={item.actor} size="sm" showVendor />
+                {/* Timeline connector dot */}
+                <div className="absolute left-2.5 top-4 flex size-3.5 items-center justify-center rounded-full bg-card ring-2 ring-primary/40">
+                  <div className="size-1.5 rounded-full bg-primary" />
                 </div>
 
-                <div className="flex-1 min-w-0 space-y-1">
-                  <div className="flex flex-wrap items-baseline justify-between gap-1">
-                    <span className="font-semibold text-foreground">{person(item.actor).name}</span>
-                    <DualTime iso={item.ts} relative className="text-[11px]" />
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <Avatar id={item.actor} size="sm" showVendor />
+                    <button
+                      type="button"
+                      onClick={() => toggleGroup(item.groupId!)}
+                      className="flex items-center gap-1.5 text-xs font-bold text-foreground hover:text-primary transition-colors text-left"
+                    >
+                      {isExpanded ? (
+                        <ChevronDown className="size-3.5 text-muted-foreground" />
+                      ) : (
+                        <ChevronRight className="size-3.5 text-muted-foreground" />
+                      )}
+                      <span>{item.title}</span>
+                    </button>
                   </div>
 
-                  {item.isGroup ? (
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() => item.groupId && toggleGroup(item.groupId)}
-                        className="inline-flex items-center gap-1.5 font-medium text-foreground hover:text-primary transition-colors text-left"
-                      >
-                        {isExpanded ? (
-                          <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
-                        ) : (
-                          <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
-                        )}
-                        <span>{item.title}</span>
-                      </button>
-
-                      {isExpanded && (
-                        <div className="mt-2 ml-2 pl-2 border-l border-border/80 space-y-2">
-                          {item.events.map((sub) => (
-                            <div key={sub.id} className="space-y-0.5">
-                              <p className="text-foreground leading-relaxed">{sub.text}</p>
-                              {sub.link && <ChatLink link={sub.link} className="text-[10px]" />}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-foreground leading-relaxed break-words">{item.title}</p>
-                  )}
-
-                  {item.link && !isExpanded && (
-                    <div className="pt-0.5">
-                      <ChatLink link={item.link} variant="open" />
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 pl-6 sm:pl-0">
+                    {item.link && <ChatLink link={item.link} variant="room" />}
+                    <DualTime iso={item.ts} className="text-[11px]" />
+                  </div>
                 </div>
+
+                {/* Sub-events inside the group */}
+                {isExpanded && (
+                  <div className="mt-2 space-y-2 border-t border-border/60 pt-2.5">
+                    {item.events.map((sub) => (
+                      <div
+                        key={sub.id}
+                        className="flex flex-col gap-1 rounded-lg bg-card/75 p-2 text-xs border border-border/40 sm:flex-row sm:items-center sm:justify-between"
+                      >
+                        <span className="text-foreground font-medium">{sub.text}</span>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {sub.link && <ChatLink link={sub.link} variant="room" />}
+                          <DualTime iso={sub.ts} className="text-[10px]" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )
-          })
-        )}
+          }
+
+          return (
+            <div
+              key={item.id}
+              className="relative flex flex-col gap-2 rounded-xl border border-border/60 bg-card/60 p-3.5 pl-11 transition-all hover:border-primary/40 hover:bg-card"
+            >
+              {/* Timeline connector dot */}
+              <div className="absolute left-2.5 top-4 flex size-3.5 items-center justify-center rounded-full bg-card ring-1 ring-border">
+                <div className="size-1.5 rounded-full bg-muted-foreground/60" />
+              </div>
+
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2.5">
+                  <Avatar id={item.actor} size="sm" showVendor />
+                  <span className="text-xs font-semibold text-foreground">{item.title}</span>
+                </div>
+
+                <div className="flex items-center gap-2 pl-6 sm:pl-0">
+                  {item.link && <ChatLink link={item.link} variant="room" />}
+                  <DualTime iso={item.ts} className="text-[11px]" />
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
-    </aside>
+    </section>
   )
 }

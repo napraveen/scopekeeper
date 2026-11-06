@@ -2,93 +2,141 @@
 **Track 1:** Best Business Workflow ($2,000 Cash Prize)  
 **Event:** WeMakeDevs "Flip the Switch" Hackathon  
 **Target Duration:** Exactly 3 minutes (180 seconds)  
+**Core Story:** *"The Night Shift That Saved $1,620"*
+
+---
+
+## 🖥️ Screen Layout for Recording (4-Pane Multi-Screen)
+
+For maximum visual impact, set up a 4-pane window capture in OBS:
+
+```
++-----------------------------------+-----------------------------------+
+| 1. Discord (Harish)               | 2. Telegram (Dhana - Your Phone)  |
+| Acme Junior Dev • Client Requester| Acme Head of Product • Signer     |
++-----------------------------------+-----------------------------------+
+| 3. Slack (Bala)                   | 4. Switch Console / Dashboard     |
+| Agency Delivery Lead & Reviewer   | Agency PM (Sakthi) & Port 5173    |
++-----------------------------------+-----------------------------------+
+```
 
 ---
 
 ## ⏱️ Video Timeline Overview
 
-| Section | Timestamp | Focus Area | Key Screen / Visual |
-| :--- | :---: | :--- | :--- |
-| **1. The $5,000 Problem** | `0:00 - 0:30` | Problem & Agency Pain | Title Slide + Ignition Report Stats |
-| **2. Native Switch Doc Store & !flip** | `0:30 - 1:00` | Switch Core Architecture | Discord/Slack (`!flip` & `/documents` query) |
-| **3. Client Request on Telegram** | `1:00 - 1:40` | Live Multi-Channel Mesh | Telegram Mobile App (`@AcmeClientDesk_bot`) |
-| **4. Autonomous Build, SOW Amendment & 1-Click PR** | `1:40 - 2:30` | Full Autonomous Execution | Git Commit + Signed Amendment + GitHub PR |
-| **5. Mission Control Dashboard** | `2:30 - 3:00` | Full Architecture & Recap | React Dashboard (`localhost:5173`) + FastMCP |
+| Act | Timestamp | Key Action | Primary Visual |
+| :---: | :---: | :--- | :--- |
+| **Act 1** | `0:00 - 0:35` | The Problem & The Shift Flip (`!flip night`) | Slide + Switch Console / Slack |
+| **Act 2** | `0:35 - 1:15` | Harish's Double Ask & Signer Authority Gate | Discord (`#acme-client`) |
+| **Act 3** | `1:15 - 1:50` | Dhana's 1-Click Telegram Inline Button Approval | Telegram (`@AcmeClientDesk_bot`) |
+| **Act 4** | `1:50 - 2:30` | Multi-Cloud Cascade & Bala's Review in Slack | Jira + Google Sheet + GitHub PR + Slack |
+| **Act 5** | `2:30 - 3:00` | Morning Brief (`!flip day`) & Dashboard ROI | Dashboard (`http://localhost:5173`) |
 
 ---
 
-## 🎙️ Word-for-Word Voiceover & Action Script
-
-### [0:00 - 0:30] The $5,000 Problem
-* **Visual:** Clean slide displaying:  
-  *"57% of software agencies lose $1,000 to $5,000 every month to unbilled scope creep."*  
-  *(Ignition 2025 State of Client Engagement Report)*
-* **Voiceover:**  
-  > *"Every software agency knows this pain: you sign a fixed Statement of Work for a client project. But as soon as work begins, clients send endless 'quick asks' in chat: 'Can we add Stripe checkout? Can you fix this button? Can we add export to CSV?'*  
-  > *Account managers hesitate to push back because they fear client friction. Developers work late nights for free. And the agency bleeds thousands of dollars every month.*  
-  > *This is ScopeKeeper: an autonomous multi-agent scope-to-delivery governance system built natively on Switch Protocol for the Flip the Switch Hackathon."*
+## 🎙️ Word-for-Word Voiceover & Action Cue Card
 
 ---
 
-### [0:30 - 1:00] Native Switch Document Store & Interactive !flip Shift Handover
-* **Visual:** Discord `#general` (Engineering squad). User types `!documents` and `!flip autopilot`.
-* **Prompt to Type on Discord:**  
-  `!documents`  
-  *then*  
-  `!flip autopilot`
-* **Voiceover:**  
-  > *"ScopeKeeper uses Switch Core's native PostgreSQL Document Store. When we send '!documents', Switch queries our room-linked authoritative SOW v1.2 contract.*  
-  > *Now, watch our standout feature: '!flip'!*  
-  > *At 7 PM, Priya triggers '!flip autopilot'. Switch immediately updates its 'role_leases' table: the Client Desk lease transfers to Scout AI, and Delivery Lead transfers to Antigravity.*  
-  > *Simultaneously, a synchronized night shift briefing broadcasts across Discord, Slack, and Telegram—confirming autonomous coverage until morning!"*
+### Act 1: The Problem & The Shift Flip (`0:00 - 0:35`)
+
+* **Visual:** Brief flash of the Ignition problem slide, then switch to **Slack / Switch Console**.
+* **Action:** In Slack or Switch Console, type:
+  ```text
+  !flip night
+  ```
+* **What Happens:**
+  * Switch Core transfers the `@client-desk` role lease in PostgreSQL from **Sakthi (Day PM)** to **Scout (Night Autopilot)**.
+  * Scout broadcasts in Discord: *"🌙 Night Autopilot Active: Scout has assumed the desk lease until 9:30 AM IST."*
+* **Voiceover:**
+  > *"57% of software agencies lose up to $5,000 every single month to unbilled scope creep. Why? Because when client teams message across chat apps at night, account managers are offline, and developers end up working for free.*  
+  > *This is ScopeKeeper: an autonomous multi-agent agency desk built natively on Switch Protocol.*  
+  > *Watch: At 7:00 PM, agency PM Sakthi types '!flip night'. Switch immediately flips its PostgreSQL role lease to Scout AI, taking over the client desk overnight!"*
 
 ---
 
-### [1:00 - 1:40] Client Request on Telegram & Deterministic Governance
-* **Visual:** Screen recording of Telegram (`@AcmeClientDesk_bot`). The client types from their phone.
-* **Prompt to Type on Telegram:**  
-  `Can we add Stripe checkout for our customers?`
-* **Voiceover:**  
-  > *"Our client Sam from Acme Corp chats on Telegram. He doesn't need to learn new tools—he talks to our client desk bot.*  
-  > *Sam asks: 'Can we add Stripe checkout for our customers?'*  
-  > *Behind the scenes, Switch Core routes the message to Scout and Antigravity. It checks Clause 6.1 of our native SOW store, calculates 18 hours at our deterministic $90 rate, and quotes $1,620 under Change Order CR-003 with zero human delay!"*
-* **Prompt to Type on Telegram:**  
-  `CONFIRM CR-003`
+### Act 2: Harish's Double Ask & Signer Authority Gate (`0:35 - 1:15`)
+
+* **Visual:** Focus on **Discord** (`#acme-client`).
+* **Action:** As Harish, send this exact message:
+  ```text
+  The CSV export button 404s, and can we quickly add Google login before Friday's launch?
+  ```
+* **What Happens:**
+  * ScopeKeeper parses the multi-ask:
+    1. **Ask 1 (CSV 404):** Confirmed as a free warranty defect under Clause 5.1 ($0.00). Automatically logs Jira Bug.
+    2. **Ask 2 (Google OAuth):** Detected as an Out-of-Scope Change Order (18 hrs / $1,620).
+  * **The Authority Gate:** ScopeKeeper recognizes Harish has `role: requester` and **cannot commit budget**. It replies in Discord:
+    > *"Ask 1 is covered under warranty ($0). Ask 2 is out of scope ($1,620). Because you are not listed as an Authorized Signatory, Change Order CO-004 has been routed to your Head of Product (@Dhana) on Telegram for approval."*
+* **Voiceover:**
+  > *"At 7:04 PM, junior client developer Harish drops two asks on Discord: a broken export button, and a new Google login feature.*  
+  > *ScopeKeeper splits them in real time: the bug is logged under our $0 warranty clause. But for Google login, ScopeKeeper enforces enterprise governance: it recognizes Harish lacks signing authority, prevents an unbilled favor, and routes Change Order CO-004 directly to client Head of Product Dhana on Telegram!"*
 
 ---
 
-### [1:40 - 2:30] Autonomous Git Build, Signed SOW Amendment & 1-Click GitHub PR
-* **Visual:** Split-screen showing:  
-  1. Terminal checking out dynamic branch `feature/cr-003-stripe-checkout`, writing the component, and committing.  
-  2. The generated official legal amendment `contracts/amendments/AMENDMENT_CR-003_stripe-checkout.md`.  
-  3. Discord receiving the alert with the **1-Click GitHub PR link**.  
-  4. Clicking the link to show GitHub's pre-filled Pull Request comparison page!
-* **Voiceover:**  
-  > *"The moment Sam types 'CONFIRM CR-003', ScopeKeeper executes the entire delivery pipeline autonomously!*  
-  > *Builder checks out a dynamic feature branch, generates the production React component, and produces an Official Signed SOW Amendment with cryptographic SHA-256 audit digest.*  
-  > *It commits and pushes directly to GitHub, and generates a pre-filled 1-Click Pull Request Compare URL.*  
-  > *In Discord and Slack, engineering and finance get the exact PR link to review and merge in one click, alongside the signed contract amendment.*  
-  > *Zero unbilled scope creep. Full legal and technical auditability."*
+### Act 3: Dhana's 1-Click Telegram Inline Button Approval (`1:15 - 1:50`)
+
+* **Visual:** Focus on **Telegram** (phone screen or desktop app).
+* **What Appears:**
+  A proposal card arrives from `@AcmeClientDesk_bot` with 3 interactive inline buttons:
+  * `[💼 Option A: Pay $1,620]`
+  * `[🔄 Option B: $0 Scope Swap (Trade D3 CSV Export)]`
+  * `[❌ Option C: Decline]`
+* **Action:** Click or tap:
+  ```text
+  [🔄 Option B: $0 Scope Swap]
+  ```
+* **What Happens:**
+  * The button click triggers a Telegram callback query.
+  * ScopeKeeper records Dhana's digital signature with SHA-256 hash.
+* **Voiceover:**
+  > *"On Telegram, Dhana receives an interactive Change Order card with 1-click inline buttons. ScopeKeeper doesn't just say 'No'—it offers a win-win: Option B trades non-essential deliverable D3 to add Google login for $0 and zero deadline delay.*  
+  > *Dhana taps Option B!"*
 
 ---
 
-### [2:30 - 3:00] Mission Control Dashboard & Architecture Recap
-* **Visual:** Browser showing the live ScopeKeeper Dashboard at `http://localhost:5173/`.  
-  Click through Mission Control, Scope Map, and the SOW Ledger.
-* **Voiceover:**  
-  > *"Finally, here is the ScopeKeeper Mission Control Dashboard.*  
-  > *Agency leaders inspect real-time protected revenue, view the active SOW ledger, review change orders, and monitor margin health.*  
-  > *Everything you saw runs on 100% free infrastructure: Switch Core 0.31 native server, PostgreSQL, FastMCP (mcp_server.py), and Google's Gemini Flash AI—with zero credit card required.*  
-  > *ScopeKeeper turns messy client scope into profitable, autonomous software delivery. Thank you!"*
+### Act 4: The Multi-Cloud Cascade & Code Review (`1:50 - 2:30`)
+
+* **Visual:** Pan across all 4 connected windows:
+  1. **Jira Board:** Backlog Story `KAN-6` appears automatically, and D3 CSV Export is marked as Swapped.
+  2. **Google Sheets:** Row appears in the *Master Billing Ledger* via live webhook ($0 Scope Swap).
+  3. **GitHub:** Dynamic branch `feature/cr-004-google-oauth` pushed, with `GoogleOauthModal.tsx` and signed SOW amendment attached to a 1-click Pull Request!
+  4. **Switch Console:** Pinned cards appear in the native **References & Artifacts Graph**.
+  5. **Slack:** Bala types:
+     ```text
+     @builder lgtm
+     ```
+* **Voiceover:**
+  > *"Instantly, ScopeKeeper fires a multi-cloud cascade:*  
+  > *Atlassian Jira updates the sprint board. Google Sheets records the transaction in the Master Billing Ledger. An official SOW Amendment is cryptographically signed.*  
+  > *On GitHub, our autonomous Builder checks out a branch, writes the React component, and opens a Pull Request with all 91 tests passing green!*  
+  > *In Slack, delivery lead Bala types '@builder lgtm' to confirm the code review."*
 
 ---
 
-## 📋 Pre-Recording Checklist
+### Act 5: The Morning Brief & Dashboard ROI (`2:30 - 3:00`)
 
-- [ ] PostgreSQL running on port `50417`
-- [ ] Switch Core running on port `50415`
-- [ ] ScopeKeeper Dashboard open at `http://localhost:5173/`
-- [ ] Telegram desktop / web open to `@AcmeClientDesk_bot`
-- [ ] Discord open to `#general` (guild `1562043658843201609`)
-- [ ] Slack open to `#general` (`My Space`)
-- [ ] GitHub repository: `https://github.com/napraveen/scopekeeper`
+* **Visual:** Open **Dashboard** at `http://localhost:5173/` and run `!flip day`.
+* **Action:** In Switch Console or Slack, type:
+  ```text
+  !flip day
+  ```
+* **What Appears:**
+  * Clerk posts the **Morning Brief**:
+    > *"☀️ Morning Brief: 2 asks processed, $1,620 revenue protected, 0 days milestone slip, 2 PRs staged."*
+  * Dashboard at `http://localhost:5173/` shows revenue protected ticker, active SOW clauses, and printable Change Order at `/co/CR-002`.
+* **Voiceover:**
+  > *"At 9:30 AM, Sakthi flips the desk back to Day Copilot. Clerk delivers the morning brief:*  
+  > *Overnight, while the agency slept, ScopeKeeper resolved a warranty bug, stopped a $1,620 scope creep leak, negotiated a win-win scope swap, updated Jira, updated the financial ledger, wrote the code, and opened the PR—without losing a single dollar or slipping a single day.*  
+  > *This is the future of agency delivery on Switch Protocol. Thank you!"*
+
+---
+
+## 📋 Pre-Recording Setup Checklist (1 Minute)
+
+- [ ] Run `python scripts/start_demo.py` (or `just demo`) in terminal.
+- [ ] Discord open to `#acme-client` (Nickname set to: `Harish (Acme Dev)`).
+- [ ] Telegram open to `@AcmeClientDesk_bot` (Your account = Dhana).
+- [ ] Slack open to `#acme-delivery` (Display name set to: `Bala (Delivery Lead)`).
+- [ ] Browser open to `http://localhost:5173/` and Switch Console.
+- [ ] Set OBS canvas to record all 4 windows simultaneously.

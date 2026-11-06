@@ -89,6 +89,40 @@
   .scrollbar-thin {
     scrollbar-width: thin;
   }
+
+  /* Glassmorphism & High-End Card Surfaces (UI UX Pro Max) */
+  .glass-card {
+    background-color: var(--card-glass);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-color: var(--card-border-glass);
+    box-shadow: var(--card-specular), 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  .specular-border {
+    box-shadow: var(--card-specular);
+  }
+
+  .hover-lift {
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms ease-out;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Ambient Backlight Glows */
+  .ambient-glow-day {
+    background: radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.12), transparent 55%);
+  }
+
+  .ambient-glow-night {
+    background: radial-gradient(circle at 85% 50%, rgba(99, 102, 241, 0.18), transparent 55%);
+  }
+
+  .ambient-glow-swap {
+    background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.14), transparent 70%);
+  }
 }
 
 /* The day/night handover cross-fades the whole UI over 400 ms. */
@@ -109,7 +143,7 @@ html.theme-transition *::after {
     box-shadow: 0 0 0 0 var(--brand-glow);
   }
   30% {
-    box-shadow: 0 0 0 4px var(--brand-glow);
+    box-shadow: 0 0 0 5px var(--brand-glow);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
@@ -117,6 +151,14 @@ html.theme-transition *::after {
 }
 .animate-glow {
   animation: card-glow 1.8s ease-out 1;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.98); }
+}
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,5 +1,9 @@
 set shell := ["powershell.exe", "-NoLogo", "-Command"]
 
+# Launch all ScopeKeeper services with 1 command (Dashboard, Backend, Orchestrator)
+demo:
+    python scripts/start_demo.py
+
 # Install dependencies and pre-commit hooks
 setup:
     cd clerk; uv sync --all-extras
