@@ -24,6 +24,14 @@ build/
 .env
 .env.local
 
+# Runtime outputs & test artifacts
+scratch/
+contracts/jira/BUG_*.json
+contracts/jira/TICKET_*.json
+contracts/google_workspace/docs/GOOGLE_DOC_*.html
+*.log
+MEDIUM_*
+
 # Node / Dashboard / Demo app
 node_modules/
 demo-app/acme-portal/

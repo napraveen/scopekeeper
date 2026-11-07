@@ -33,24 +33,24 @@ When an agency in Bengaluru (`Asia/Kolkata`) builds for a client in San Francisc
 
 ---
 
-## ⚡ The Solution: "The Night Shift That Saved $1,620"
+## ⚡ The Solution: "The Night Shift That Saved $1,890"
 
 ScopeKeeper transforms **Switch Protocol** into the central operating nervous system of a modern software agency:
 - **Day Copilot (`@sakthi`):** Human Account Manager oversees client governance during daytime office hours.
 - **The Shift Flip (`!flip night`):** At 7:00 PM IST, Sakthi transfers the `@client-desk` lease to **Scout AI Autopilot**, taking over the client desk overnight.
 - **Signer Authority Enforcement:** When junior client dev **Harish** asks for out-of-scope features on Discord, ScopeKeeper flags that Harish lacks signing authority and routes proposal `CR-004` directly to **Dhana** (Client Head of Product) on Telegram.
 - **Interactive Win-Win Negotiation:** Dhana receives an interactive card on Telegram with **Inline Keyboard Buttons**:
-  - `[💼 Option A: Pay $1,620]`
+  - `[💼 Option A: Pay $1,890]`
   - `[🔄 Option B: $0 Scope Swap (Trade D3 CSV Export)]`
   - `[❌ Option C: Decline]`
 - **1-Click Multi-Cloud Cascade:** The moment Dhana taps **Option B**, ScopeKeeper autonomously:
-  1. 🔷 **Atlassian Jira Cloud:** Creates Story `KAN-6` and deprioritizes swapped deliverable D3.
-  2. 📊 **Google Sheets:** Appends row to the *Master Billing Ledger* via live Apps Script webhook.
-  3. 📜 **Google Docs / Amendments:** Formats and signs official SOW Amendment `AMENDMENT_CR-004_google-oauth.md` with SHA-256 hash.
-  4. 🐙 **GitHub PR Engine:** Branches `feature/cr-004-google-oauth`, writes `GoogleOauthModal.tsx`, commits, pushes, and opens PR with CI passing.
+  1. 🔷 **Atlassian Jira Cloud:** Creates Story `KAN-30` and deprioritizes swapped deliverable D3.
+  2. 📊 **Google Workspace Sheets:** Appends row to the *Master Billing Ledger* via live Apps Script webhook.
+  3. 📜 **Google Docs / Amendments:** Formats and signs official SOW Amendment `AMENDMENT_CR-004_stripe-checkout-portal.md` with SHA-256 hash.
+  4. 🐙 **GitHub PR Engine:** Branches `feature/cr-004-stripe-checkout-portal`, writes `StripeCheckoutModal.tsx`, commits, pushes, and opens PR with CI passing.
   5. 🛡️ **Switch Native References Graph:** Pins Jira, Sheets, and PR links directly into Switch PostgreSQL `references` and `room_references` tables!
   6. 👨‍💻 **Code Review Handshake:** Bala (Delivery Lead) in Slack reviews and confirms with `@builder lgtm`.
-- **Morning Brief (`!flip day`):** At 9:30 AM IST, Sakthi wakes up to an executive brief: **2 asks processed, $1,620 protected, 0 days slip**.
+- **Morning Brief (`!flip day`):** At 9:30 AM IST, Sakthi wakes up to an executive brief: **2 asks processed, $1,890 protected, 0 days slip**.
 
 ---
 
@@ -157,7 +157,7 @@ flowchart TD
 * **Zero-Dollar Scope Swaps:** Instead of aggressive "No" responses, offers client flexibility by trading non-essential deliverables (D3 CSV export) to preserve deadlines and budgets.
 
 ### 4. Presentation and Documentation (Weight: 20%)
-* **Clear 3-Minute Rehearsal Script:** [`DEMO_SCRIPT.md`](DEMO_SCRIPT.md) provides exact cue cards for video recording.
+* **Clear 3-Minute Walkthrough:** [YouTube Demo Video](https://youtu.be/placeholder-scopekeeper-demo) provides the exact 5-act demonstration across all 4 platforms.
 * **Live Executive Dashboard:** Port `5173` displays dual timezone clocks, sprint burn-down, and printable change orders (`/co/CR-002`).
 
 ---

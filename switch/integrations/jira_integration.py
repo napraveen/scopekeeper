@@ -13,6 +13,7 @@ import json
 import uuid
 import httpx
 from datetime import datetime, timezone
+from typing import Any
 
 # Load .env variables automatically if present
 _env_path = os.path.join(r"f:\2026 - Projects\scopekeeper", ".env")
@@ -113,7 +114,9 @@ async def create_jira_change_order_story(change_order_data: dict) -> dict:
     # Always persist local Jira Ticket record
     ticket_record = {
         "key": jira_key,
+        "issue_key": jira_key,
         "url": jira_url,
+        "issue_url": jira_url,
         "issue_type": "Story",
         "summary": summary,
         "cr_id": cr_id,
@@ -134,10 +137,16 @@ async def create_jira_change_order_story(change_order_data: dict) -> dict:
         
     return ticket_record
 
-async def create_jira_warranty_defect_bug(defect_text: str, reporter: str = "Client") -> dict:
+async def create_jira_warranty_defect_bug(defect_input: Any, reporter: str = "Client") -> dict:
     """
     Create an official Jira Bug for an in-scope defect covered 100% under Clause 5.1 Warranty ($0.00).
     """
+    if isinstance(defect_input, dict):
+        defect_text = defect_input.get("title") or defect_input.get("defect") or str(defect_input)
+        reporter = defect_input.get("reporter", reporter)
+    else:
+        defect_text = str(defect_input)
+
     bug_key = get_next_bug_key("ACME")
     jira_url = f"{JIRA_URL}/browse/{bug_key}"
     now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
@@ -188,7 +197,9 @@ async def create_jira_warranty_defect_bug(defect_text: str, reporter: str = "Cli
 
     ticket_record = {
         "key": bug_key,
+        "issue_key": bug_key,
         "url": jira_url,
+        "issue_url": jira_url,
         "issue_type": "Bug",
         "summary": summary,
         "defect": defect_text,
